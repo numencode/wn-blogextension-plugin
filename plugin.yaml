@@ -1,0 +1,6 @@
+plugin:
+    name: 'numencode.blogextension::lang.plugin.name'
+    description: 'numencode.blogextension::lang.plugin.description'
+    author: 'Blaz Orazem'
+    icon: icon-space-shuttle
+    homepage: 'https://github.com/numencode/blogextension-plugin'
