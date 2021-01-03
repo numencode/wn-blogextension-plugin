@@ -1,2 +1,8 @@
 1.0.1:
     - 'Initialize plugin'
+1.0.2:
+    - 'Created table numencode_blogextension_pictures'
+    - create_numencode_blogextension_pictures_table.php
+1.0.3:
+    - 'Created table numencode_blogextension_files'
+    - create_numencode_blogextension_files_table.php

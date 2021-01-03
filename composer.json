@@ -1,5 +1,21 @@
 {
     "name": "numencode/blogextension-plugin",
+    "description": "NumenCode Blog Extension plugin for October CMS",
     "type": "october-plugin",
-    "description": "NumenCode BlogExtension plugin for October CMS"
+    "homepage": "https://www.numencode.com",
+    "keywords": ["october", "cms", "octobercms", "laravel"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Blaz Orazem",
+            "email": "blaz@orazem.si",
+            "homepage": "https://orazem.si",
+            "role": "Founder"
+        }
+    ],
+    "require": {
+        "php": ">=7.3",
+        "rainlab/blog-plugin": "dev-master",
+        "numencode/fundamentals-plugin": "dev-master"
+    }
 }
