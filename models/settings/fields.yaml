@@ -1,0 +1,20 @@
+# ===================================
+#  Field Definitions
+# ===================================
+
+tabs:
+    fields:
+        access_pictures:
+            label: numencode.blogextension::lang.pictures.gallery
+            comment: numencode.blogextension::lang.settings.pictures
+            type: switch
+            span: auto
+            default: false
+            tab: numencode.blogextension::lang.tabs.extensions
+        access_files:
+            label: numencode.blogextension::lang.files.label
+            comment: numencode.blogextension::lang.settings.files
+            type: switch
+            span: auto
+            default: false
+            tab: numencode.blogextension::lang.tabs.extensions

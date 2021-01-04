@@ -2,5 +2,5 @@ plugin:
     name: 'numencode.blogextension::lang.plugin.name'
     description: 'numencode.blogextension::lang.plugin.description'
     author: 'Blaz Orazem'
-    icon: icon-space-shuttle
+    icon: icon-pencil-square-o
     homepage: 'https://github.com/numencode/blogextension-plugin'
