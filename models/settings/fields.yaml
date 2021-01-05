@@ -18,3 +18,17 @@ tabs:
             span: auto
             default: false
             tab: numencode.blogextension::lang.tabs.extensions
+        content_wysiwyg:
+            label: numencode.blogextension::lang.settings.content_title
+            comment: numencode.blogextension::lang.settings.content_description
+            type: switch
+            span: auto
+            default: false
+            tab: numencode.blogextension::lang.tabs.editors
+        excerpt_wysiwyg:
+            label: numencode.blogextension::lang.settings.excerpt_title
+            comment: numencode.blogextension::lang.settings.excerpt_description
+            type: switch
+            span: auto
+            default: false
+            tab: numencode.blogextension::lang.tabs.editors

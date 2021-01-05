@@ -1,5 +1,6 @@
 <?php namespace NumenCode\BlogExtension\Classes;
 
+use Event;
 use BackendAuth;
 use RainLab\Blog\Models\Post;
 use NumenCode\Fundamentals\Bootstrap\ConfigOverride;
@@ -9,10 +10,36 @@ class ExtendBlogPostFields
 {
     public function init()
     {
-        ConfigOverride::extendFields(Post::class, function ($config) {
-            unset($config['secondaryTabs']['fields']['featured_images']);
+        $this->beautifyForm();
+        $this->addPictureGallery();
+        $this->addFileAttachments();
+        $this->prepareContentEditor();
+        $this->prepareExcerptEditor();
+    }
 
+    protected function beautifyForm()
+    {
+        ConfigOverride::extendFields(Post::class, function ($config) {
+            $config['secondaryTabs']['fields']['published']['span'] = 'auto';
+            $config['secondaryTabs']['fields']['published']['comment'] = 'numencode.fundamentals::lang.field.is_published_comment';
+            $config['secondaryTabs']['fields']['user']['span'] = 'auto';
+            $config['secondaryTabs']['fields']['published_at']['span'] = 'auto';
+            $config['secondaryTabs']['fields']['excerpt']['span'] = 'full';
+            $config['secondaryTabs']['fields']['categories']['span'] = 'auto';
+
+            $config['secondaryTabs']['fields'] = array_move_element_before($config['secondaryTabs']['fields'], 'user', 'published_at');
+            $config['secondaryTabs']['fields'] = array_move_element_before($config['secondaryTabs']['fields'], 'user', 'excerpt');
+
+            return $config;
+        });
+    }
+
+    protected function addPictureGallery()
+    {
+        ConfigOverride::extendFields(Post::class, function ($config) {
             if ($this->hasPicturesAccess()) {
+                unset($config['secondaryTabs']['fields']['featured_images']);
+
                 $config['secondaryTabs']['fields'] = array_merge($config['secondaryTabs']['fields'], [
                     'pictures_list' => [
                         'tab'   => 'numencode.blogextension::lang.tabs.pictures',
@@ -50,6 +77,13 @@ class ExtendBlogPostFields
                 ]);
             }
 
+            return $config;
+        });
+    }
+
+    protected function addFileAttachments()
+    {
+        ConfigOverride::extendFields(Post::class, function ($config) {
             if ($this->hasFilesAccess()) {
                 $config['secondaryTabs']['fields'] = array_merge($config['secondaryTabs']['fields'], [
                     'files_list' => [
@@ -88,14 +122,52 @@ class ExtendBlogPostFields
                 ]);
             }
 
-            $config['secondaryTabs']['fields']['published']['span'] = 'auto';
-            $config['secondaryTabs']['fields']['published']['comment'] = 'numencode.fundamentals::lang.field.is_published_comment';
-            $config['secondaryTabs']['fields']['user']['span'] = 'auto';
-            $config['secondaryTabs']['fields']['published_at']['span'] = 'auto';
-            $config['secondaryTabs']['fields']['excerpt']['span'] = 'full';
+            return $config;
+        });
+    }
 
-            $config['secondaryTabs']['fields'] = array_move_element_before($config['secondaryTabs']['fields'], 'user', 'published_at');
-            $config['secondaryTabs']['fields'] = array_move_element_before($config['secondaryTabs']['fields'], 'user', 'excerpt');
+    public function prepareContentEditor()
+    {
+        if (!BlogSettings::get('content_wysiwyg')) {
+            return;
+        }
+
+        Event::listen('backend.form.extendFields', function ($form) {
+            if ($form->model instanceof \RainLab\Blog\Models\Post) {
+                $replaceable = [
+                    'codeeditor',
+                    'richeditor',
+                    'RainLab\Blog\FormWidgets\BlogMarkdown',
+                    'RainLab\Blog\FormWidgets\MLBlogMarkdown',
+                    'mlricheditor',
+                ];
+
+                $multilingual = [
+                    'RainLab\Blog\FormWidgets\MLBlogMarkdown',
+                    'mlricheditor',
+                ];
+
+                foreach ($form->getFields() as $field) {
+                    if (!empty($field->config['type']) && in_array($field->config['type'], $replaceable)) {
+                        $editor = in_array($field->config['type'], $multilingual) ? 'mlricheditor' : 'richeditor';
+                        $field->config['type'] = $field->config['widget'] = $editor;
+
+                        return;
+                    }
+                }
+            }
+        });
+    }
+
+    protected function prepareExcerptEditor()
+    {
+        if (!BlogSettings::get('excerpt_wysiwyg')) {
+            return;
+        }
+
+        ConfigOverride::extendFields(Post::class, function ($config) {
+            $config['secondaryTabs']['fields']['excerpt']['type'] = 'richeditor';
+            $config['secondaryTabs']['fields']['excerpt']['size'] = 'large';
 
             return $config;
         });

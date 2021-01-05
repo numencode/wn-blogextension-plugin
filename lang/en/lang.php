@@ -18,9 +18,13 @@ return [
         'files'      => 'Files',
     ],
     'settings'    => [
-        'manage'   => 'Manage blog extension settings',
-        'pictures' => 'Enable picture gallery on blog post',
-        'files'    => 'Enable attached files on blog post',
+        'manage'              => 'Manage blog extension settings',
+        'pictures'            => 'Enable picture gallery on blog post.',
+        'files'               => 'Enable file attachments on blog post.',
+        'content_title'       => 'WYSIWYG content',
+        'content_description' => 'Replace blog post markdown content with WYSIWYG editor.',
+        'excerpt_title'       => 'WYSIWYG excerpt',
+        'excerpt_description' => 'Replace blog post excerpt with WYSIWYG editor.',
     ],
     'pictures'    => [
         'gallery'              => 'Picture gallery',
