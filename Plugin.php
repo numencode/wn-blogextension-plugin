@@ -12,6 +12,17 @@ class Plugin extends PluginBase
         'NumenCode.Fundamentals',
     ];
 
+    public function pluginDetails()
+    {
+        return [
+            'name'        => 'numencode.blogextension::lang.plugin.name',
+            'description' => 'numencode.blogextension::lang.plugin.description',
+            'author'      => 'Blaz Orazem',
+            'icon'        => 'icon-pencil-square-o',
+            'homepage'    => 'https://github.com/numencode/blogextension-plugin',
+        ];
+    }
+
     public function register()
     {
         //

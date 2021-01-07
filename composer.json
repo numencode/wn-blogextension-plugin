@@ -3,13 +3,13 @@
     "description": "NumenCode Blog Extension plugin for October CMS",
     "type": "october-plugin",
     "homepage": "https://www.numencode.com",
-    "keywords": ["october", "cms", "octobercms", "laravel"],
+    "keywords": ["october", "cms", "octobercms", "laravel", "numencode"],
     "license": "MIT",
     "authors": [
         {
             "name": "Blaz Orazem",
             "email": "blaz@orazem.si",
-            "homepage": "https://orazem.si",
+            "homepage": "https://www.orazem.si/",
             "role": "Founder"
         }
     ],
