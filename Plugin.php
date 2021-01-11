@@ -1,6 +1,7 @@
 <?php namespace NumenCode\BlogExtension;
 
 use System\Classes\PluginBase;
+use NumenCode\BlogExtension\Components\Breadcrumbs;
 use NumenCode\BlogExtension\Classes\ExtendBlogPostModel;
 use NumenCode\BlogExtension\Classes\ExtendBlogPostFields;
 use NumenCode\BlogExtension\Classes\ExtendBlogCategoryColumns;
@@ -12,7 +13,7 @@ class Plugin extends PluginBase
         'NumenCode.Fundamentals',
     ];
 
-    public function pluginDetails()
+    public function pluginDetails(): array
     {
         return [
             'name'        => 'numencode.blogextension::lang.plugin.name',
@@ -35,7 +36,7 @@ class Plugin extends PluginBase
         (new ExtendBlogCategoryColumns())->init();
     }
 
-    public function registerPermissions()
+    public function registerPermissions(): array
     {
         return [
             'numencode.blogextension.manage_settings' => [
@@ -53,7 +54,7 @@ class Plugin extends PluginBase
         ];
     }
 
-    public function registerSettings()
+    public function registerSettings(): array
     {
         return [
             'settings' => [
@@ -64,6 +65,20 @@ class Plugin extends PluginBase
                 'category'    => 'rainlab.blog::lang.blog.menu_label',
                 'permissions' => ['numencode.blogextension.manage_settings'],
             ],
+        ];
+    }
+
+    public function registerComponents(): array
+    {
+        return [
+            Breadcrumbs::class => 'breadcrumbs',
+        ];
+    }
+
+    public function registerPageSnippets(): array
+    {
+        return [
+            Breadcrumbs::class => 'breadcrumbs',
         ];
     }
 }
