@@ -40,4 +40,16 @@ return [
         'is_published'         => 'Published?',
         'is_published_comment' => 'Unpublished files can only be viewed by administrators.',
     ],
+    'breadcrumbs' => [
+        'name'                 => 'Breadcrumbs for blog',
+        'description'          => 'Display breadcrumbs on the blog category and blog post.',
+        'category'             => 'Category component alias',
+        'category_description' => 'Alias of the Post List component. A unique name given to the Post List component when using it in the page or layout code.',
+        'post'                 => 'Post component alias',
+        'post_description'     => 'Alias of the Post component. A unique name given to the Post component when using it in the page or layout code.',
+        'homepage'             => 'Homepage title',
+        'homepage_description' => 'Enter the title for the homepage',
+        'divider'              => 'Divider character',
+        'divider_description'  => 'Character used to divide the breadcrumbs elements',
+    ],
 ];
