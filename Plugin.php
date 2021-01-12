@@ -1,6 +1,10 @@
 <?php namespace NumenCode\BlogExtension;
 
 use System\Classes\PluginBase;
+use RainLab\Blog\Components\Post;
+use RainLab\Blog\Components\Posts;
+use RainLab\Blog\Components\RssFeed;
+use RainLab\Blog\Components\Categories;
 use NumenCode\BlogExtension\Components\Breadcrumbs;
 use NumenCode\BlogExtension\Classes\ExtendBlogPostModel;
 use NumenCode\BlogExtension\Classes\ExtendBlogPostFields;
@@ -78,6 +82,13 @@ class Plugin extends PluginBase
     public function registerPageSnippets(): array
     {
         return [
+            // RainLab components
+            Post::class        => 'blogPost',
+            Posts::class       => 'blogPosts',
+            Categories::class  => 'blogCategories',
+            RssFeed::class     => 'blogRssFeed',
+
+            // NumenCode components
             Breadcrumbs::class => 'breadcrumbs',
         ];
     }
