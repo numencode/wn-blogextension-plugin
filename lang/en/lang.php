@@ -47,8 +47,6 @@ return [
         'category_description' => 'Alias of the Post List component. A unique name given to the Post List component when using it in the page or layout code.',
         'post'                 => 'Post component alias',
         'post_description'     => 'Alias of the Post component. A unique name given to the Post component when using it in the page or layout code.',
-        'homepage'             => 'Homepage title',
-        'homepage_description' => 'Enter the title for the homepage',
         'divider'              => 'Divider character',
         'divider_description'  => 'Character used to divide the breadcrumbs elements',
     ],

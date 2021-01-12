@@ -8,8 +8,8 @@ use RainLab\Blog\Models\Category;
 
 class Breadcrumbs extends ComponentBase
 {
-    protected $categories;
     protected $breadcrumbs;
+    protected $categories;
 
     public $divider;
 
@@ -41,12 +41,6 @@ class Breadcrumbs extends ComponentBase
                 'description' => 'numencode.blogextension::lang.breadcrumbs.post_description',
                 'type'        => 'string',
                 'default'     => 'blogPost',
-            ],
-            'homepage'     => [
-                'title'       => 'numencode.blogextension::lang.breadcrumbs.homepage',
-                'description' => 'numencode.blogextension::lang.breadcrumbs.homepage_description',
-                'default'     => 'Home',
-                'type'        => 'string',
             ],
             'divider'      => [
                 'title'       => 'numencode.blogextension::lang.breadcrumbs.divider',
@@ -93,7 +87,6 @@ class Breadcrumbs extends ComponentBase
 
     protected function getCategoryPath(Category $category, Post $post = null): array
     {
-        $category->nolink = !$post;
         $categoryPath[] = $category;
 
         $this->getLastParent($category->parent_id, $categoryPath);
@@ -122,33 +115,28 @@ class Breadcrumbs extends ComponentBase
 
     protected function buildBreadcrumbs($categoryPath, Post $post = null): array
     {
-        $breadcrumbs[] = [
-            'name' => $this->property('homepage'),
-            'link' => url('/'),
-        ];
+        $breadcrumbs = [];
 
         if (!empty($categoryPath)) {
-            foreach ($categoryPath as $category) {
-                $link = null;
-
-                if (!$category->nolink) {
-                    $link = $this->controller->pageUrl($this->property('categoryPage'), [
-                        'id'   => $category->id,
-                        'slug' => $category->slug,
-                    ]);
-                }
+            foreach ($categoryPath as $key => $category) {
+                $link = $this->controller->pageUrl($this->property('categoryPage'), [
+                    'id'   => $category->id,
+                    'slug' => $category->slug,
+                ]);
 
                 $breadcrumbs[] = [
-                    'name' => $category->name,
-                    'link' => $link,
+                    'title'    => $category->name,
+                    'url'      => $link,
+                    'isActive' => !$post && count($categoryPath) == $key + 1,
                 ];
             }
         }
 
         if ($post) {
             $breadcrumbs[] = [
-                'link' => null,
-                'name' => $post->title,
+                'title'    => $post->title,
+                'url'      => $post->slug,
+                'isActive' => true,
             ];
         }
 
