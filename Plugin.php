@@ -6,6 +6,7 @@ use RainLab\Blog\Components\Posts;
 use RainLab\Blog\Components\RssFeed;
 use RainLab\Blog\Components\Categories;
 use NumenCode\BlogExtension\Components\Breadcrumbs;
+use NumenCode\BlogExtension\Components\ReadingTime;
 use NumenCode\BlogExtension\Classes\ExtendBlogPostModel;
 use NumenCode\BlogExtension\Classes\ExtendBlogPostFields;
 use NumenCode\BlogExtension\Classes\ExtendBlogCategoryColumns;
@@ -76,6 +77,7 @@ class Plugin extends PluginBase
     {
         return [
             Breadcrumbs::class => 'breadcrumbs',
+            ReadingTime::class => 'readingTime',
         ];
     }
 
@@ -90,6 +92,7 @@ class Plugin extends PluginBase
 
             // NumenCode components
             Breadcrumbs::class => 'breadcrumbs',
+            ReadingTime::class => 'readingTime',
         ];
     }
 }

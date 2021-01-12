@@ -1,6 +1,5 @@
 <?php namespace NumenCode\BlogExtension\Components;
 
-use Db;
 use Cms\Classes\Page;
 use RainLab\Blog\Models\Post;
 use Cms\Classes\ComponentBase;
@@ -24,28 +23,31 @@ class Breadcrumbs extends ComponentBase
     public function defineProperties(): array
     {
         return [
-            'categoryPage' => [
+            'categoryPage'  => [
                 'title'       => 'rainlab.blog::lang.settings.post_category',
                 'description' => 'rainlab.blog::lang.settings.post_category_description',
                 'type'        => 'dropdown',
                 'default'     => 'blog/category',
             ],
             'categoryAlias' => [
-                'title'       => 'numencode.blogextension::lang.breadcrumbs.category',
-                'description' => 'numencode.blogextension::lang.breadcrumbs.category_description',
-                'type'        => 'string',
-                'default'     => 'blogPosts',
+                'title'             => 'numencode.blogextension::lang.components.category',
+                'description'       => 'numencode.blogextension::lang.components.category_description',
+                'type'              => 'string',
+                'default'           => 'blogPosts',
+                'showExternalParam' => false,
             ],
-            'postAlias' => [
-                'title'       => 'numencode.blogextension::lang.breadcrumbs.post',
-                'description' => 'numencode.blogextension::lang.breadcrumbs.post_description',
-                'type'        => 'string',
-                'default'     => 'blogPost',
+            'postAlias'     => [
+                'title'             => 'numencode.blogextension::lang.components.post',
+                'description'       => 'numencode.blogextension::lang.components.post_description',
+                'type'              => 'string',
+                'default'           => 'blogPost',
+                'showExternalParam' => false,
             ],
-            'divider'      => [
-                'title'       => 'numencode.blogextension::lang.breadcrumbs.divider',
-                'description' => 'numencode.blogextension::lang.breadcrumbs.divider_description',
-                'type'        => 'string',
+            'divider'       => [
+                'title'             => 'numencode.blogextension::lang.breadcrumbs.divider',
+                'description'       => 'numencode.blogextension::lang.breadcrumbs.divider_description',
+                'type'              => 'string',
+                'showExternalParam' => false,
             ],
         ];
     }
