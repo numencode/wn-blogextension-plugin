@@ -3,8 +3,8 @@
 use System\Classes\PluginBase;
 use RainLab\Blog\Components\Post;
 use RainLab\Blog\Components\Posts;
-use RainLab\Blog\Components\RssFeed;
 use RainLab\Blog\Components\Categories;
+use NumenCode\BlogExtension\Components\RssFeed;
 use NumenCode\BlogExtension\Components\Breadcrumbs;
 use NumenCode\BlogExtension\Components\ReadingTime;
 use NumenCode\BlogExtension\Classes\ExtendBlogPostModel;
@@ -46,15 +46,15 @@ class Plugin extends PluginBase
         return [
             'numencode.blogextension.manage_settings' => [
                 'tab'   => 'numencode.blogextension::lang.tabs.blog',
-                'label' => 'numencode.blogextension::lang.settings.manage',
+                'label' => 'numencode.blogextension::lang.settings.general.manage',
             ],
             'numencode.blogextension.access_pictures' => [
                 'tab'   => 'numencode.blogextension::lang.tabs.blog',
-                'label' => 'numencode.blogextension::lang.settings.pictures',
+                'label' => 'numencode.blogextension::lang.settings.extensions.pictures',
             ],
             'numencode.blogextension.access_files' => [
                 'tab'   => 'numencode.blogextension::lang.tabs.blog',
-                'label' => 'numencode.blogextension::lang.settings.files',
+                'label' => 'numencode.blogextension::lang.settings.extensions.files',
             ],
         ];
     }
@@ -64,7 +64,7 @@ class Plugin extends PluginBase
         return [
             'settings' => [
                 'label'       => 'numencode.blogextension::lang.plugin.name',
-                'description' => 'numencode.blogextension::lang.settings.manage',
+                'description' => 'numencode.blogextension::lang.settings.general.manage',
                 'icon'        => 'icon-pencil-square-o',
                 'class'       => 'NumenCode\BlogExtension\Models\Settings',
                 'category'    => 'rainlab.blog::lang.blog.menu_label',
@@ -78,6 +78,7 @@ class Plugin extends PluginBase
         return [
             Breadcrumbs::class => 'breadcrumbs',
             ReadingTime::class => 'readingTime',
+            RssFeed::class     => 'rssFeed',
         ];
     }
 
@@ -88,11 +89,11 @@ class Plugin extends PluginBase
             Post::class        => 'blogPost',
             Posts::class       => 'blogPosts',
             Categories::class  => 'blogCategories',
-            RssFeed::class     => 'blogRssFeed',
 
             // NumenCode components
             Breadcrumbs::class => 'breadcrumbs',
             ReadingTime::class => 'readingTime',
+            RssFeed::class     => 'rssFeed',
         ];
     }
 }

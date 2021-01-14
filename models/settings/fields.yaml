@@ -4,31 +4,96 @@
 
 tabs:
     fields:
-        access_pictures:
-            label: numencode.blogextension::lang.pictures.gallery
-            comment: numencode.blogextension::lang.settings.pictures
-            type: switch
-            span: auto
-            default: false
+
+#    Extensions tab
+        extension_pictures:
             tab: numencode.blogextension::lang.tabs.extensions
-        access_files:
-            label: numencode.blogextension::lang.files.label
-            comment: numencode.blogextension::lang.settings.files
+            label: numencode.blogextension::lang.settings.extensions.pictures_label
+            comment: numencode.blogextension::lang.settings.extensions.pictures_comment
             type: switch
             span: auto
             default: false
+
+        extension_files:
             tab: numencode.blogextension::lang.tabs.extensions
-        content_wysiwyg:
-            label: numencode.blogextension::lang.settings.content_title
-            comment: numencode.blogextension::lang.settings.content_description
+            label: numencode.blogextension::lang.settings.extensions.files_label
+            comment: numencode.blogextension::lang.settings.extensions.files_comment
             type: switch
             span: auto
             default: false
+
+#    Editors tab
+        editor_content_wysiwyg:
             tab: numencode.blogextension::lang.tabs.editors
-        excerpt_wysiwyg:
-            label: numencode.blogextension::lang.settings.excerpt_title
-            comment: numencode.blogextension::lang.settings.excerpt_description
+            label: numencode.blogextension::lang.settings.editors.content_title
+            comment: numencode.blogextension::lang.settings.editors.content_description
             type: switch
             span: auto
             default: false
+
+        editor_excerpt_wysiwyg:
             tab: numencode.blogextension::lang.tabs.editors
+            label: numencode.blogextension::lang.settings.editors.excerpt_title
+            comment: numencode.blogextension::lang.settings.editors.excerpt_description
+            type: switch
+            span: auto
+            default: false
+
+#    RSS Feed tab
+        rss_feed_title:
+            tab: numencode.blogextension::lang.tabs.rss_feed
+            label: numencode.blogextension::lang.settings.rss_feed.title_label
+            comment: numencode.blogextension::lang.settings.rss_feed.title_comment
+            type: text
+
+        rss_feed_description:
+            tab: numencode.blogextension::lang.tabs.rss_feed
+            label: numencode.blogextension::lang.settings.rss_feed.description_label
+            comment: numencode.blogextension::lang.settings.rss_feed.description_comment
+            type: textarea
+            size: small
+
+        rss_feed_category:
+            tab: numencode.blogextension::lang.tabs.rss_feed
+            label: numencode.blogextension::lang.settings.rss_feed.category_label
+            comment: numencode.blogextension::lang.settings.rss_feed.category_comment
+            type: text
+
+        rss_feed_copyright:
+            tab: numencode.blogextension::lang.tabs.rss_feed
+            label: numencode.blogextension::lang.settings.rss_feed.copyright_label
+            comment: numencode.blogextension::lang.settings.rss_feed.copyright_comment
+            placeholder: numencode.blogextension::lang.settings.rss_feed.copyright_placeholder
+            type: text
+
+        rss_feed_generator:
+            tab: numencode.blogextension::lang.tabs.rss_feed
+            label: numencode.blogextension::lang.settings.rss_feed.generator_label
+            comment: numencode.blogextension::lang.settings.rss_feed.generator_comment
+            placeholder: 'October CMS'
+            type: text
+
+        rss_feed_language:
+            tab: numencode.blogextension::lang.tabs.rss_feed
+            label: numencode.blogextension::lang.settings.rss_feed.language_label
+            comment: numencode.blogextension::lang.settings.rss_feed.language_comment
+            type: dropdown
+
+        rss_feed_comments:
+            tab: numencode.blogextension::lang.tabs.rss_feed
+            label: numencode.blogextension::lang.settings.rss_feed.comments_label
+            placeholder: numencode.blogextension::lang.settings.rss_feed.comments_placeholder
+            comment: numencode.blogextension::lang.settings.rss_feed.comments_comment
+            type: text
+
+        rss_feed_author:
+            tab: numencode.blogextension::lang.tabs.rss_feed
+            label: numencode.blogextension::lang.settings.rss_feed.author_label
+            comment: numencode.blogextension::lang.settings.rss_feed.author_comment
+            type: text
+
+        rss_feed_content:
+            tab: numencode.blogextension::lang.tabs.rss_feed
+            label: numencode.blogextension::lang.settings.rss_feed.content_label
+            comment: numencode.blogextension::lang.settings.rss_feed.content_comment
+            type: checkbox
