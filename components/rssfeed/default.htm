@@ -1,0 +1,40 @@
+{% set channel = __SELF__.channel %}
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>{{ channel.title ?: (this.page.meta_title ?: this.page.title) }}</title>
+        <link>{{ link }}</link>
+        <atom:link href="{{ rssLink }}" rel="self" type="application/rss+xml" />
+        {% if channel.category %}
+            <category>{{ channel.category }}</category>
+        {% endif %}
+        <description><![CDATA[{{ channel.description ?: (this.page.meta_description ?: this.page.description) }}]]></description>
+        {% if channel.copyright %}
+            <copyright>{{ channel.copyright }}</copyright>
+        {% endif %}
+        <lastBuildDate>{{ channel.last_build_date }}</lastBuildDate>
+        <language>{{ channel.language }}</language>
+        {% if channel.generator %}
+            <generator>{{ channel.generator }}</generator>
+        {% endif %}
+        <docs>http://www.rssboard.org/rss-specification</docs>
+        {% for post in posts %}
+            <item>
+                <title>{{ post.title }}</title>
+                <link>{{ post.url }}</link>
+                <description><![CDATA[{{ channel.content ? post.content : post.summary }}]]></description>
+                {% if channel.author %}
+                    <author>{{ channel.author }}</author>
+                {% endif %}
+                {% if post.categories|default(null) %}
+                    <category>{{ post.categories.0.name }}</category>
+                {% endif %}
+                {% if channel.comments %}
+                    <comments>{{ post.url }}#{{ channel.comments }}</comments>
+                {% endif %}
+                <guid>{{ post.url }}</guid>
+                <pubDate>{{ post.published_at.toRfc2822String }}</pubDate>
+            </item>
+        {% endfor %}
+    </channel>
+</rss>

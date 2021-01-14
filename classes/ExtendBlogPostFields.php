@@ -128,7 +128,7 @@ class ExtendBlogPostFields
 
     public function prepareContentEditor()
     {
-        if (!BlogSettings::get('content_wysiwyg')) {
+        if (!BlogSettings::get('editor_content_wysiwyg')) {
             return;
         }
 
@@ -161,7 +161,7 @@ class ExtendBlogPostFields
 
     protected function prepareExcerptEditor()
     {
-        if (!BlogSettings::get('excerpt_wysiwyg')) {
+        if (!BlogSettings::get('editor_excerpt_wysiwyg')) {
             return;
         }
 
@@ -177,13 +177,13 @@ class ExtendBlogPostFields
     {
         $backendUser = BackendAuth::getUser();
 
-        return $backendUser && $backendUser->hasAccess('numencode.blogextension.access_pictures') && BlogSettings::get('access_pictures');
+        return $backendUser && $backendUser->hasAccess('numencode.blogextension.access_pictures') && BlogSettings::get('extension_pictures');
     }
 
     protected function hasFilesAccess()
     {
         $backendUser = BackendAuth::getUser();
 
-        return $backendUser && $backendUser->hasAccess('numencode.blogextension.access_files') && BlogSettings::get('access_files');
+        return $backendUser && $backendUser->hasAccess('numencode.blogextension.access_files') && BlogSettings::get('extension_files');
     }
 }
