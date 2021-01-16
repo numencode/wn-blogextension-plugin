@@ -1,9 +1,6 @@
 <?php namespace NumenCode\BlogExtension;
 
 use System\Classes\PluginBase;
-use RainLab\Blog\Components\Post;
-use RainLab\Blog\Components\Posts;
-use RainLab\Blog\Components\Categories;
 use NumenCode\BlogExtension\Components\RssFeed;
 use NumenCode\BlogExtension\Components\Breadcrumbs;
 use NumenCode\BlogExtension\Components\ReadingTime;
@@ -76,24 +73,9 @@ class Plugin extends PluginBase
     public function registerComponents(): array
     {
         return [
-            Breadcrumbs::class => 'breadcrumbs',
-            ReadingTime::class => 'readingTime',
-            RssFeed::class     => 'rssFeed',
-        ];
-    }
-
-    public function registerPageSnippets(): array
-    {
-        return [
-            // RainLab components
-            Post::class        => 'blogPost',
-            Posts::class       => 'blogPosts',
-            Categories::class  => 'blogCategories',
-
-            // NumenCode components
-            Breadcrumbs::class => 'breadcrumbs',
-            ReadingTime::class => 'readingTime',
-            RssFeed::class     => 'rssFeed',
+            Breadcrumbs::class => 'blogBreadcrumbs',
+            ReadingTime::class => 'blogReadingTime',
+            RssFeed::class     => 'blogRssFeed',
         ];
     }
 }

@@ -78,10 +78,12 @@ return [
         'is_published_comment' => 'Unpublished files can only be viewed by administrators.',
     ],
     'breadcrumbs'  => [
-        'name'                => 'Breadcrumbs for blog',
-        'description'         => 'Display breadcrumbs on the blog category and blog post.',
-        'divider'             => 'Divider character',
-        'divider_description' => 'Character used to divide the breadcrumbs elements',
+        'name'                      => 'Breadcrumbs for blog',
+        'description'               => 'Display breadcrumbs on the blog category and blog post.',
+        'compatibility'             => 'Is staticBreadcrumbs component used?',
+        'compatibility_description' => 'Check this if RainLab.Pages staticBreadcrumbs component is used besides blogBreadcrumbs.',
+        'divider'                   => 'Divider character',
+        'divider_description'       => 'Character used to divide the breadcrumbs elements.',
     ],
     'reading_time' => [
         'name'          => 'Reading time',

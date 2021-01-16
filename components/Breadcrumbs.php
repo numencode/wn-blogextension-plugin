@@ -7,9 +7,10 @@ use RainLab\Blog\Models\Category;
 
 class Breadcrumbs extends ComponentBase
 {
-    protected $breadcrumbs;
     protected $categories;
 
+    public $blogBreadcrumbs;
+    public $compatibility;
     public $divider;
 
     public function componentDetails(): array
@@ -43,6 +44,12 @@ class Breadcrumbs extends ComponentBase
                 'default'           => 'blogPost',
                 'showExternalParam' => false,
             ],
+            'compatibility' => [
+                'title'             => 'numencode.blogextension::lang.breadcrumbs.compatibility',
+                'description'       => 'numencode.blogextension::lang.breadcrumbs.compatibility_description',
+                'type'              => 'checkbox',
+                'showExternalParam' => false,
+            ],
             'divider'       => [
                 'title'             => 'numencode.blogextension::lang.breadcrumbs.divider',
                 'description'       => 'numencode.blogextension::lang.breadcrumbs.divider_description',
@@ -65,15 +72,24 @@ class Breadcrumbs extends ComponentBase
     public function onRun()
     {
         $categoryPath = [];
-        $this->divider = $this->property('divider');
         $categoryAlias = $this->property('categoryAlias');
         $postAlias = $this->property('postAlias');
 
+        $this->divider = $this->property('divider');
+        $this->compatibility = (bool)$this->property('compatibility');
+
         if (isset($this->page->components[$categoryAlias])) {
-            $category = $this->page->components[$categoryAlias]->category;
+            if (!$category = $this->page->components[$categoryAlias]->category) {
+                return $this->blogBreadcrumbs = $this->page['breadcrumbs'] = [[
+                    'title'    => $this->page->title,
+                    'url'      => $this->page->url,
+                    'isActive' => true,
+                ]];
+            }
+
             $categoryPath = $this->getCategoryPath($category);
 
-            $this->breadcrumbs = $this->page['breadcrumbs'] = $this->buildBreadcrumbs($categoryPath);
+            return $this->blogBreadcrumbs = $this->page['breadcrumbs'] = $this->buildBreadcrumbs($categoryPath);
         }
 
         if (isset($this->page->components[$postAlias])) {
@@ -83,7 +99,7 @@ class Breadcrumbs extends ComponentBase
                 $categoryPath = $this->getCategoryPath($category, $post);
             }
 
-            $this->breadcrumbs = $this->page['breadcrumbs'] = $this->buildBreadcrumbs($categoryPath, $post);
+            return $this->blogBreadcrumbs = $this->page['breadcrumbs'] = $this->buildBreadcrumbs($categoryPath, $post);
         }
     }
 
