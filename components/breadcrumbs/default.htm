@@ -1,6 +1,8 @@
+{% set blogBreadcrumbs = __SELF__.blogBreadcrumbs %}
+{% set compatibility = __SELF__.compatibility %}
 {% set divider = __SELF__.divider %}
 
-{% if breadcrumbs %}
+{% if blogBreadcrumbs and not compatibility %}
     <ol class="breadcrumb">
         <li class="breadcrumb-item">
             <a href="/">{{ 'Home'|_ }}</a>
@@ -8,7 +10,7 @@
                 <span class="breadcrumb-divider">{{ divider }}</span>
             {% endif %}
         </li>
-        {% for breadcrumb in breadcrumbs %}
+        {% for breadcrumb in blogBreadcrumbs %}
             <li class="breadcrumb-item {{ breadcrumb.isActive ? 'active' : '' }}">
                 {% if breadcrumb.isActive %}
                     {{ breadcrumb.title }}
