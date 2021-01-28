@@ -1,0 +1,7 @@
+{% set tags = __SELF__.tags %}
+
+{% for tag in tags %}
+    <a href="{{ tag.url ?: '#' }}" class="btn btn-secondary btn-sm mb-1 {{ tag.url ?: 'disabled' }}">
+        {{ tag.name }}
+    </a>
+{% endfor %}

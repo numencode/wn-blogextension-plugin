@@ -20,14 +20,14 @@ class ReadingTime extends ComponentBase
     {
         return [
             'postAlias'    => [
-                'title'             => 'numencode.blogextension::lang.components.post',
-                'description'       => 'numencode.blogextension::lang.components.post_description',
+                'title'             => 'numencode.blogextension::lang.aliases.post_title',
+                'description'       => 'numencode.blogextension::lang.aliases.post_description',
                 'type'              => 'string',
                 'default'           => 'blogPost',
                 'showExternalParam' => false,
             ],
             'readingSpeed' => [
-                'title'             => 'numencode.blogextension::lang.reading_time.speed',
+                'title'             => 'numencode.blogextension::lang.reading_time.speed_title',
                 'description'       => 'numencode.blogextension::lang.reading_time.speed_comment',
                 'default'           => static::DEFAULT_READING_SPEED,
                 'type'              => 'string',

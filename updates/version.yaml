@@ -14,3 +14,6 @@
     - 'Blog breadcrumbs added'
 1.0.7:
     - 'Advanced RSS feed added'
+1.0.8:
+    - 'Blog tags added'
+    - create_numencode_blogextension_tags_table.php

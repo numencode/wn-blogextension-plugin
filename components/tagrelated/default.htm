@@ -1,0 +1,54 @@
+{% set posts = __SELF__.posts %}
+
+<div class="row">
+    {% for post in posts %}
+        <div class="col-md-12">
+            {% if post.primaryPicture %}
+                <a href="{{ post.url }}">
+                    <img class="img-fluid rounded mb-2" src="{{ post.primaryPicture.picture|media|resize('750x300.crop') }}" alt="{{ post.primaryPicture.title }}">
+                </a>
+            {% endif %}
+
+            <h4>
+                <a href="{{ post.url }}">
+                    {{ post.title }}
+                </a>
+            </h4>
+
+            <p class="text-muted">
+                {% if post.categories.count %}
+                    {% set categoryLinks = post.categories | map(c => "<a href=\"#{c.url}\">#{c.name}</a>") | join(', ') %}
+
+                    {{ 'rainlab.blog::lang.post.posted_byline' | trans({
+                        date: post.published_at | date('rainlab.blog::lang.post.date_format' | trans),
+                        categories: categoryLinks
+                    }) }}
+                {% else %}
+                    {{ 'rainlab.blog::lang.post.posted_byline_no_categories' | trans({
+                        date: post.published_at | date('rainlab.blog::lang.post.date_format' | trans)
+                    }) }}
+                {% endif %}
+            </p>
+
+            <p>{{ post.summary | raw }}</p>
+
+            <p>
+                {% for tag in post.tags %}
+                    <a href="{{ tag.url ?: '#' }}" class="btn btn-info btn-sm mb-1 {{ tag.url ?: 'disabled' }}">
+                        {{ tag.name }}
+                    </a>
+                {% endfor %}
+            </p>
+
+            <a href="{{ post.url }}" class="btn btn-primary btn-sm">{{ 'Read More' |_ }} &rarr;</a>
+
+            {% if not loop.last %}
+                <div class="border-bottom mt-4 mb-4"></div>
+            {% endif %}
+        </div>
+    {% else %}
+        <div class="col-md-12">
+            <p class="lead">{{ __SELF__.noPostsMessage }}</p>
+        </div>
+    {% endfor %}
+</div>

@@ -1,0 +1,21 @@
+# ===================================
+#  List Behavior Config
+# ===================================
+
+list: $/numencode/blogextension/models/tag/columns.yaml
+modelClass: NumenCode\BlogExtension\Models\Tag
+title: 'numencode.blogextension::lang.tags.manage'
+noRecordsMessage: 'backend::lang.list.no_records'
+recordUrl: 'numencode/blogextension/tags/update/:id'
+showSetup: true
+showCheckboxes: true
+recordsPerPage: 20
+showPageNumbers: true
+showSorting: true
+defaultSort:
+    column: name
+    direction: asc
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'

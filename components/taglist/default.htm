@@ -1,0 +1,12 @@
+{% set tags = __SELF__.tags %}
+
+<div class="blog-tag-list">
+    {% for tag in tags %}
+        <a href="{{ tag.url ?: '#' }}" class="btn btn-info btn-sm mb-1 {{ tag.url ?: 'disabled' }}">
+            {{ tag.name }}
+            {% if tag.posts_count %}
+                <span class="badge badge-light">{{ tag.posts_count }}</span>
+            {% endif %}
+        </a>
+    {% endfor %}
+</div>

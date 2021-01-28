@@ -1,0 +1,72 @@
+{% set posts = __SELF__.posts %}
+{% set tag = __SELF__.tag %}
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a href="/">{{ 'Home'|_ }}</a>
+    </li>
+    <li class="breadcrumb-item active">
+        {{ 'Blog tag'|_ }}
+    </li>
+    <li class="breadcrumb-item">
+        {% if tag %}{{ tag.name }}{% else %}{{ slug }}{% endif %}
+    </li>
+</ol>
+
+{% for post in posts %}
+    <div class="card mb-4">
+        {% if post.primaryPicture %}
+            <img class="card-img-top" src="{{ post.primaryPicture.picture|media|resize('750x300.crop') }}" alt="{{ post.primaryPicture.title }}">
+        {% endif %}
+        <div class="card-body">
+            <h2 class="card-title">{{ post.title }}</h2>
+            <p class="card-text">{{ post.summary | raw }}</p>
+            <p>
+                {% for tag in post.tags %}
+                    <a href="{{ tag.url ?: '#' }}" class="btn {{ tag.slug == slug ? 'btn-success' : 'btn-secondary' }} btn-sm mb-1 {{ tag.url ?: 'disabled' }}">
+                        {{ tag.name }}
+                    </a>
+                {% endfor %}
+            </p>
+            <a href="{{ post.url }}" class="btn btn-primary">{{ 'Read More' |_ }} &rarr;</a>
+        </div>
+        <div class="card-footer text-muted">
+            {% if post.categories.count %}
+                {% set categoryLinks = post.categories | map(c => "<a href=\"#{c.url}\">#{c.name}</a>") | join(', ') %}
+
+                {{ 'rainlab.blog::lang.post.posted_byline' | trans({
+                    date: post.published_at | date('rainlab.blog::lang.post.date_format' | trans),
+                    categories: categoryLinks
+                }) }}
+            {% else %}
+                {{ 'rainlab.blog::lang.post.posted_byline_no_categories' | trans({
+                    date: post.published_at | date('rainlab.blog::lang.post.date_format' | trans)
+                }) }}
+            {% endif %}
+        </div>
+    </div>
+{% else %}
+    <p class="lead">{{ __SELF__.noPostsMessage }}</p>
+{% endfor %}
+
+{% if posts.lastPage > 1 %}
+    <ul class="pagination justify-content-center mb-4">
+        {% if posts.currentPage > 1 %}
+            <li class="page-item">
+                <a class="page-link" href="{{ this.page.baseFileName | page({ (__SELF__.pageParam): (posts.currentPage-1) }) }}">&larr; {{ 'Prev' |_ }}</a>
+            </li>
+        {% endif %}
+
+        {% for page in 1..posts.lastPage %}
+            <li class="page-item{{ posts.currentPage == page ? ' active' : null }}">
+                <a class="page-link" href="{{ this.page.baseFileName | page({ (__SELF__.pageParam): page }) }}">{{ page }}</a>
+            </li>
+        {% endfor %}
+
+        {% if posts.lastPage > posts.currentPage %}
+            <li class="page-item">
+                <a class="page-link" href="{{ this.page.baseFileName | page({ (__SELF__.pageParam): (posts.currentPage+1) }) }}">{{ 'Next' |_ }} &rarr;</a>
+            </li>
+        {% endif %}
+    </ul>
+{% endif %}
