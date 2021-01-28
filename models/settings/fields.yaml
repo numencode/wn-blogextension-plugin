@@ -1,5 +1,5 @@
 # ===================================
-#  Field Definitions
+#  Form Field Definitions
 # ===================================
 
 tabs:
@@ -10,6 +10,14 @@ tabs:
             tab: numencode.blogextension::lang.tabs.extensions
             label: numencode.blogextension::lang.settings.extensions.pictures_label
             comment: numencode.blogextension::lang.settings.extensions.pictures_comment
+            type: switch
+            span: auto
+            default: false
+
+        extension_tags:
+            tab: numencode.blogextension::lang.tabs.extensions
+            label: numencode.blogextension::lang.settings.extensions.tags_label
+            comment: numencode.blogextension::lang.settings.extensions.tags_comment
             type: switch
             span: auto
             default: false

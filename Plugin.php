@@ -2,9 +2,14 @@
 
 use System\Classes\PluginBase;
 use NumenCode\BlogExtension\Components\RssFeed;
+use NumenCode\BlogExtension\Components\TagList;
+use NumenCode\BlogExtension\Components\TagPost;
+use NumenCode\BlogExtension\Components\TagFilter;
+use NumenCode\BlogExtension\Components\TagRelated;
 use NumenCode\BlogExtension\Components\Breadcrumbs;
 use NumenCode\BlogExtension\Components\ReadingTime;
 use NumenCode\BlogExtension\Classes\ExtendBlogPostModel;
+use NumenCode\BlogExtension\Classes\ExtendBlogNavigation;
 use NumenCode\BlogExtension\Classes\ExtendBlogPostFields;
 use NumenCode\BlogExtension\Classes\ExtendBlogCategoryColumns;
 
@@ -33,6 +38,7 @@ class Plugin extends PluginBase
 
     public function boot()
     {
+        (new ExtendBlogNavigation())->init();
         (new ExtendBlogPostModel())->init();
         (new ExtendBlogPostFields())->init();
         (new ExtendBlogCategoryColumns())->init();
@@ -43,15 +49,19 @@ class Plugin extends PluginBase
         return [
             'numencode.blogextension.manage_settings' => [
                 'tab'   => 'numencode.blogextension::lang.tabs.blog',
-                'label' => 'numencode.blogextension::lang.settings.general.manage',
+                'label' => 'numencode.blogextension::lang.settings.manage.blog',
+            ],
+            'numencode.blogextension.access_tags'     => [
+                'tab'   => 'numencode.blogextension::lang.tabs.blog',
+                'label' => 'numencode.blogextension::lang.settings.manage.tags',
             ],
             'numencode.blogextension.access_pictures' => [
                 'tab'   => 'numencode.blogextension::lang.tabs.blog',
-                'label' => 'numencode.blogextension::lang.settings.extensions.pictures',
+                'label' => 'numencode.blogextension::lang.settings.manage.pictures',
             ],
-            'numencode.blogextension.access_files' => [
+            'numencode.blogextension.access_files'    => [
                 'tab'   => 'numencode.blogextension::lang.tabs.blog',
-                'label' => 'numencode.blogextension::lang.settings.extensions.files',
+                'label' => 'numencode.blogextension::lang.settings.manage.files',
             ],
         ];
     }
@@ -61,7 +71,7 @@ class Plugin extends PluginBase
         return [
             'settings' => [
                 'label'       => 'numencode.blogextension::lang.plugin.name',
-                'description' => 'numencode.blogextension::lang.settings.general.manage',
+                'description' => 'numencode.blogextension::lang.settings.manage.blog',
                 'icon'        => 'icon-pencil-square-o',
                 'class'       => 'NumenCode\BlogExtension\Models\Settings',
                 'category'    => 'rainlab.blog::lang.blog.menu_label',
@@ -76,6 +86,10 @@ class Plugin extends PluginBase
             Breadcrumbs::class => 'blogBreadcrumbs',
             ReadingTime::class => 'blogReadingTime',
             RssFeed::class     => 'blogRssFeed',
+            TagList::class     => 'blogTagList',
+            TagPost::class     => 'blogTagPost',
+            TagFilter::class   => 'blogTagFilter',
+            TagRelated::class  => 'blogTagRelated',
         ];
     }
 }

@@ -1,0 +1,17 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+    id:
+        span: auto
+        cssClass: hidden
+        type: number
+    name:
+        label: 'numencode.blogextension::lang.tags.name'
+        span: left
+    slug:
+        label: 'numencode.blogextension::lang.tags.slug'
+        disabled: true
+        preset: name
+        span: right

@@ -25,33 +25,33 @@ class Breadcrumbs extends ComponentBase
     {
         return [
             'categoryPage'  => [
-                'title'       => 'rainlab.blog::lang.settings.post_category',
-                'description' => 'rainlab.blog::lang.settings.post_category_description',
+                'title'       => 'numencode.blogextension::lang.pages.category_title',
+                'description' => 'numencode.blogextension::lang.pages.category_description',
                 'type'        => 'dropdown',
                 'default'     => 'blog/category',
             ],
             'categoryAlias' => [
-                'title'             => 'numencode.blogextension::lang.components.category',
-                'description'       => 'numencode.blogextension::lang.components.category_description',
+                'title'             => 'numencode.blogextension::lang.aliases.category_title',
+                'description'       => 'numencode.blogextension::lang.aliases.category_description',
                 'type'              => 'string',
                 'default'           => 'blogPosts',
                 'showExternalParam' => false,
             ],
             'postAlias'     => [
-                'title'             => 'numencode.blogextension::lang.components.post',
-                'description'       => 'numencode.blogextension::lang.components.post_description',
+                'title'             => 'numencode.blogextension::lang.aliases.post_title',
+                'description'       => 'numencode.blogextension::lang.aliases.post_description',
                 'type'              => 'string',
                 'default'           => 'blogPost',
                 'showExternalParam' => false,
             ],
             'compatibility' => [
-                'title'             => 'numencode.blogextension::lang.breadcrumbs.compatibility',
+                'title'             => 'numencode.blogextension::lang.breadcrumbs.compatibility_title',
                 'description'       => 'numencode.blogextension::lang.breadcrumbs.compatibility_description',
                 'type'              => 'checkbox',
                 'showExternalParam' => false,
             ],
             'divider'       => [
-                'title'             => 'numencode.blogextension::lang.breadcrumbs.divider',
+                'title'             => 'numencode.blogextension::lang.breadcrumbs.divider_title',
                 'description'       => 'numencode.blogextension::lang.breadcrumbs.divider_description',
                 'type'              => 'string',
                 'showExternalParam' => false,
@@ -62,11 +62,6 @@ class Breadcrumbs extends ComponentBase
     public function init()
     {
         $this->categories = Category::all();
-    }
-
-    public function getCategoryPageOptions()
-    {
-        return Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
     }
 
     public function onRun()
@@ -159,5 +154,10 @@ class Breadcrumbs extends ComponentBase
         }
 
         return $breadcrumbs;
+    }
+
+    public function getCategoryPageOptions()
+    {
+        return Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
     }
 }

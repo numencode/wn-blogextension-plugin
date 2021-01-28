@@ -11,6 +11,7 @@ class ExtendBlogPostFields
     public function init()
     {
         $this->beautifyForm();
+        $this->addTags();
         $this->addPictureGallery();
         $this->addFileAttachments();
         $this->prepareContentEditor();
@@ -29,6 +30,25 @@ class ExtendBlogPostFields
 
             $config['secondaryTabs']['fields'] = array_move_element_before($config['secondaryTabs']['fields'], 'user', 'published_at');
             $config['secondaryTabs']['fields'] = array_move_element_before($config['secondaryTabs']['fields'], 'user', 'excerpt');
+
+            return $config;
+        });
+    }
+
+    protected function addTags()
+    {
+        ConfigOverride::extendFields(Post::class, function ($config) {
+            if ($this->hasTagsAccess()) {
+                $config['secondaryTabs']['fields'] = array_merge($config['secondaryTabs']['fields'], [
+                    'tags' => [
+                        'tab'   => 'rainlab.blog::lang.post.tab_categories',
+                        'label' => 'numencode.blogextension::lang.tags.label',
+                        'type'  => 'taglist',
+                        'mode'  => 'relation',
+                        'span'  => 'full',
+                    ],
+                ]);
+            }
 
             return $config;
         });
@@ -80,7 +100,6 @@ class ExtendBlogPostFields
             return $config;
         });
     }
-
     protected function addFileAttachments()
     {
         ConfigOverride::extendFields(Post::class, function ($config) {
@@ -173,14 +192,21 @@ class ExtendBlogPostFields
         });
     }
 
-    protected function hasPicturesAccess()
+    protected function hasTagsAccess(): bool
+    {
+        $backendUser = BackendAuth::getUser();
+
+        return $backendUser && $backendUser->hasAccess('numencode.blogextension.access_tags') && BlogSettings::get('extension_tags');
+    }
+
+    protected function hasPicturesAccess(): bool
     {
         $backendUser = BackendAuth::getUser();
 
         return $backendUser && $backendUser->hasAccess('numencode.blogextension.access_pictures') && BlogSettings::get('extension_pictures');
     }
 
-    protected function hasFilesAccess()
+    protected function hasFilesAccess(): bool
     {
         $backendUser = BackendAuth::getUser();
 
