@@ -63,6 +63,10 @@ class Plugin extends PluginBase
                 'tab'   => 'numencode.blogextension::lang.tabs.blog',
                 'label' => 'numencode.blogextension::lang.settings.manage.files',
             ],
+            'numencode.blogextension.access_faker'    => [
+                'tab'   => 'numencode.blogextension::lang.tabs.blog',
+                'label' => 'numencode.blogextension::lang.settings.manage.faker',
+            ],
         ];
     }
 
