@@ -111,6 +111,8 @@ tabs:
             tab: numencode.blogextension::lang.tabs.faker
             label: numencode.blogextension::lang.settings.faker.section_data
             type: section
+            permissions:
+                - numencode.blogextension.access_faker
 
         faker_categories:
             tab: numencode.blogextension::lang.tabs.faker
@@ -119,6 +121,8 @@ tabs:
             type: number
             span: auto
             placeholder: 5
+            permissions:
+                - numencode.blogextension.access_faker
 
         faker_posts:
             tab: numencode.blogextension::lang.tabs.faker
@@ -127,11 +131,15 @@ tabs:
             type: number
             span: auto
             placeholder: 20
+            permissions:
+                - numencode.blogextension.access_faker
 
         section2:
             tab: numencode.blogextension::lang.tabs.faker
             label: numencode.blogextension::lang.settings.faker.section_content
             type: section
+            permissions:
+                - numencode.blogextension.access_faker
 
         faker_content:
             tab: numencode.blogextension::lang.tabs.faker
@@ -140,6 +148,8 @@ tabs:
             type: number
             span: auto
             placeholder: 1000
+            permissions:
+                - numencode.blogextension.access_faker
 
         faker_paragraphs:
             tab: numencode.blogextension::lang.tabs.faker
@@ -147,11 +157,15 @@ tabs:
             comment: numencode.blogextension::lang.settings.faker.paragraphs_comment
             type: checkbox
             span: auto
+            permissions:
+                - numencode.blogextension.access_faker
 
         section3:
             tab: numencode.blogextension::lang.tabs.faker
             label: numencode.blogextension::lang.settings.faker.section_media
             type: section
+            permissions:
+                - numencode.blogextension.access_faker
 
         faker_media:
             tab: numencode.blogextension::lang.tabs.faker
@@ -159,6 +173,8 @@ tabs:
             comment: numencode.blogextension::lang.settings.faker.media_comment
             type: dropdown
             span: auto
+            permissions:
+                - numencode.blogextension.access_faker
 
         faker_pictures:
             tab: numencode.blogextension::lang.tabs.faker
@@ -166,17 +182,25 @@ tabs:
             comment: numencode.blogextension::lang.settings.faker.pictures_comment
             type: checkbox
             span: auto
+            permissions:
+                - numencode.blogextension.access_faker
 
         section4:
             tab: numencode.blogextension::lang.tabs.faker
             type: section
+            permissions:
+                - numencode.blogextension.access_faker
 
         faker_hint:
             tab: numencode.blogextension::lang.tabs.faker
             type: hint
             path: $/numencode/blogextension/partials/hint.htm
+            permissions:
+                - numencode.blogextension.access_faker
 
         faker_generate:
             tab: numencode.blogextension::lang.tabs.faker
             type: partial
             path: $/numencode/blogextension/partials/generate.htm
+            permissions:
+                - numencode.blogextension.access_faker
