@@ -105,3 +105,78 @@ tabs:
             label: numencode.blogextension::lang.settings.rss_feed.content_label
             comment: numencode.blogextension::lang.settings.rss_feed.content_comment
             type: checkbox
+
+#    Faker tab
+        section1:
+            tab: numencode.blogextension::lang.tabs.faker
+            label: numencode.blogextension::lang.settings.faker.section_data
+            type: section
+
+        faker_categories:
+            tab: numencode.blogextension::lang.tabs.faker
+            label: numencode.blogextension::lang.settings.faker.categories_label
+            comment: numencode.blogextension::lang.settings.faker.categories_comment
+            type: number
+            span: auto
+            placeholder: 5
+
+        faker_posts:
+            tab: numencode.blogextension::lang.tabs.faker
+            label: numencode.blogextension::lang.settings.faker.posts_label
+            comment: numencode.blogextension::lang.settings.faker.posts_comment
+            type: number
+            span: auto
+            placeholder: 20
+
+        section2:
+            tab: numencode.blogextension::lang.tabs.faker
+            label: numencode.blogextension::lang.settings.faker.section_content
+            type: section
+
+        faker_content:
+            tab: numencode.blogextension::lang.tabs.faker
+            label: numencode.blogextension::lang.settings.faker.content_label
+            comment: numencode.blogextension::lang.settings.faker.content_comment
+            type: number
+            span: auto
+            placeholder: 1000
+
+        faker_paragraphs:
+            tab: numencode.blogextension::lang.tabs.faker
+            label: numencode.blogextension::lang.settings.faker.paragraphs_label
+            comment: numencode.blogextension::lang.settings.faker.paragraphs_comment
+            type: checkbox
+            span: auto
+
+        section3:
+            tab: numencode.blogextension::lang.tabs.faker
+            label: numencode.blogextension::lang.settings.faker.section_media
+            type: section
+
+        faker_media:
+            tab: numencode.blogextension::lang.tabs.faker
+            label: numencode.blogextension::lang.settings.faker.media_label
+            comment: numencode.blogextension::lang.settings.faker.media_comment
+            type: dropdown
+            span: auto
+
+        faker_pictures:
+            tab: numencode.blogextension::lang.tabs.faker
+            label: numencode.blogextension::lang.settings.faker.pictures_label
+            comment: numencode.blogextension::lang.settings.faker.pictures_comment
+            type: checkbox
+            span: auto
+
+        section4:
+            tab: numencode.blogextension::lang.tabs.faker
+            type: section
+
+        faker_hint:
+            tab: numencode.blogextension::lang.tabs.faker
+            type: hint
+            path: $/numencode/blogextension/partials/hint.htm
+
+        faker_generate:
+            tab: numencode.blogextension::lang.tabs.faker
+            type: partial
+            path: $/numencode/blogextension/partials/generate.htm

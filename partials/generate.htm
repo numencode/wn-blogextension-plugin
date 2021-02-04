@@ -1,0 +1,36 @@
+<div class="generate-frame">
+    <button id="generate" type="button" onclick="runFaker()" class="btn btn-primary">
+        <?= trans('numencode.blogextension::lang.settings.faker.generate_button') ?>
+    </button>
+    <br>
+    <img id="process" src="<?=url('/')?>/plugins/numencode/blogextension/assets/process.gif?v=1" alt="loader" hidden>
+    <hr>
+</div>
+
+<style type="text/css">
+    #process {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+</style>
+
+<script type="text/javascript">
+    function runFaker(){
+        $("#generate").attr("disabled", true);
+        $("#process").attr("hidden", false);
+
+        let generatingText = "<?= trans('numencode.blogextension::lang.settings.faker.generate_begin') ?>";
+        let completedText = "<?= trans('numencode.blogextension::lang.settings.faker.generate_complete') ?>";
+
+        $.oc.flashMsg({'text': generatingText, 'class': 'success', 'interval': 3});
+
+        $.get("<?=url(config('cms.backendUri'))?>/numencode/blogextension/faker", function(data) {
+            $.oc.flashMsg({'text': completedText, 'class': 'success', 'interval': 3});
+
+            $('#generate').removeAttr("disabled");
+            $("#process").attr("hidden", true);
+        });
+    }
+</script>

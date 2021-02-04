@@ -14,7 +14,8 @@
         }
     ],
     "require": {
-        "php": ">=7.3",
+        "php": ">=7.2",
+        "fakerphp/faker": "^1.13",
         "rainlab/blog-plugin": "dev-master",
         "numencode/fundamentals-plugin": "dev-master"
     }
