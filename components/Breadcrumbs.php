@@ -1,9 +1,9 @@
 <?php namespace NumenCode\BlogExtension\Components;
 
 use Cms\Classes\Page;
-use RainLab\Blog\Models\Post;
+use Winter\Blog\Models\Post;
 use Cms\Classes\ComponentBase;
-use RainLab\Blog\Models\Category;
+use Winter\Blog\Models\Category;
 
 class Breadcrumbs extends ComponentBase
 {

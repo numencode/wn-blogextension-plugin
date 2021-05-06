@@ -1,7 +1,7 @@
 <?php namespace NumenCode\BlogExtension\Updates;
 
 use Schema;
-use October\Rain\Database\Updates\Migration;
+use Winter\Storm\Database\Updates\Migration;
 
 class CreateNumencodeBlogextensionTagsTable extends Migration
 {
@@ -15,7 +15,7 @@ class CreateNumencodeBlogextensionTagsTable extends Migration
             $table->string('slug', 27)->nullable()->index();
             $table->timestamps();
         });
-        
+
         Schema::create('numencode_blogextension_posts_tags', function ($table)
         {
             $table->engine = 'InnoDB';
@@ -23,7 +23,7 @@ class CreateNumencodeBlogextensionTagsTable extends Migration
             $table->integer('post_id')->unsigned();
             $table->index(['tag_id', 'post_id']);
             $table->foreign('tag_id')->references('id')->on('numencode_blogextension_tags')->onDelete('cascade');
-            $table->foreign('post_id')->references('id')->on('rainlab_blog_posts')->onDelete('cascade');
+            $table->foreign('post_id')->references('id')->on('winter_blog_posts')->onDelete('cascade');
         });
     }
 

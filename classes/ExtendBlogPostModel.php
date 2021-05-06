@@ -1,6 +1,6 @@
 <?php namespace NumenCode\BlogExtension\Classes;
 
-use RainLab\Blog\Models\Post;
+use Winter\Blog\Models\Post;
 use NumenCode\BlogExtension\Models\Tag;
 use NumenCode\BlogExtension\Models\File;
 use NumenCode\BlogExtension\Models\Picture;
@@ -10,7 +10,7 @@ class ExtendBlogPostModel
     public function init()
     {
         Post::extend(function ($post) {
-            $post->implement[] = 'October.Rain.Database.Behaviors.Purgeable';
+            $post->implement[] = 'Winter.Storm.Database.Behaviors.Purgeable';
             $post->implement[] = 'NumenCode.Fundamentals.Behaviors.RelationableModel';
 
             $post->belongsToMany['tags'] = [Tag::class, 'table' => 'numencode_blogextension_posts_tags'];

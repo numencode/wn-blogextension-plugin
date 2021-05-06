@@ -3,10 +3,10 @@
 use Storage;
 use Carbon\Carbon;
 use Faker\Factory;
-use RainLab\Blog\Models\Post;
+use Winter\Blog\Models\Post;
 use Backend\Classes\Controller;
 use Backend\Facades\BackendAuth;
-use RainLab\Blog\Models\Category;
+use Winter\Blog\Models\Category;
 use NumenCode\BlogExtension\Models\Picture;
 use NumenCode\BlogExtension\Models\Settings;
 

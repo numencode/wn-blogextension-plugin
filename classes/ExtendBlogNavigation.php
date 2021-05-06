@@ -13,12 +13,12 @@ class ExtendBlogNavigation
             $backendUser = BackendAuth::getUser();
 
             if ($backendUser && $backendUser->hasAccess('numencode.blogextension.access_tags') && BlogSettings::get('extension_tags')) {
-                $manager->addSideMenuItems('RainLab.Blog', 'blog', [
+                $manager->addSideMenuItems('Winter.Blog', 'blog', [
                     'tags' => [
                         'label' => 'numencode.blogextension::lang.tags.title',
                         'icon'  => 'icon-tags',
                         'code'  => 'tags',
-                        'owner' => 'RainLab.Blog',
+                        'owner' => 'Winter.Blog',
                         'url'   => Backend::url('numencode/blogextension/tags'),
                     ]
                 ]);

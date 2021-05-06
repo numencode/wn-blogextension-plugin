@@ -3,7 +3,7 @@
 return [
     'plugin'       => [
         'name'        => 'Blog Extension',
-        'description' => 'NumenCode Blog Extension plugin extends the RainLab.Blog plugin.',
+        'description' => 'NumenCode Blog Extension plugin extends the Winter.Blog plugin.',
     ],
     'tabs'         => [
         'blog'       => 'Blog Extension',
@@ -49,7 +49,7 @@ return [
             'generator_label'       => 'RSS Feed Generator',
             'generator_comment'     => 'A string indicating the program used to generate the channel.',
             'language_label'        => 'RSS Feed Language',
-            'language_comment'      => 'If RainLab.Translate plugin is enabled, language selection will be overridden with appropriate active language.',
+            'language_comment'      => 'If Winter.Translate plugin is enabled, language selection will be overridden with appropriate active language.',
             'comments_label'        => 'Comments section anchor',
             'comments_comment'      => 'Enter the ID of the element hosting the comments section.',
             'comments_placeholder'  => 'post-comments',
@@ -167,7 +167,7 @@ return [
         'name'                      => 'Breadcrumbs for blog',
         'description'               => 'Display breadcrumbs on the blog category and blog post.',
         'compatibility_title'       => 'Is staticBreadcrumbs component used?',
-        'compatibility_description' => 'Check this if RainLab.Pages staticBreadcrumbs component is used besides blogBreadcrumbs.',
+        'compatibility_description' => 'Check this if Winter.Pages staticBreadcrumbs component is used besides blogBreadcrumbs.',
         'divider_title'             => 'Divider character',
         'divider_description'       => 'Character used to divide the breadcrumbs elements.',
     ],
