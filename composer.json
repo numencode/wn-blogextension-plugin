@@ -1,9 +1,9 @@
 {
     "name": "numencode/blogextension-plugin",
-    "description": "NumenCode Blog Extension plugin for October CMS",
-    "type": "october-plugin",
+    "description": "NumenCode Blog Extension plugin for Winter CMS",
+    "type": "winter-plugin",
     "homepage": "https://www.numencode.com",
-    "keywords": ["october", "cms", "octobercms", "laravel", "numencode"],
+    "keywords": ["winter", "cms", "wintercms", "laravel", "numencode"],
     "license": "MIT",
     "authors": [
         {
@@ -14,9 +14,9 @@
         }
     ],
     "require": {
-        "php": ">=7.2",
+        "php": ">=7.2.9",
         "fakerphp/faker": "^1.13",
-        "rainlab/blog-plugin": "dev-master",
+        "winter/wn-blog-plugin": "dev-master",
         "numencode/fundamentals-plugin": "dev-master"
     }
 }

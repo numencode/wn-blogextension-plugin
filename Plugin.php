@@ -16,7 +16,7 @@ use NumenCode\BlogExtension\Classes\ExtendBlogCategoryColumns;
 class Plugin extends PluginBase
 {
     public $require = [
-        'RainLab.Blog',
+        'Winter.Blog',
         'NumenCode.Fundamentals',
     ];
 
@@ -78,7 +78,7 @@ class Plugin extends PluginBase
                 'description' => 'numencode.blogextension::lang.settings.manage.blog',
                 'icon'        => 'icon-pencil-square-o',
                 'class'       => 'NumenCode\BlogExtension\Models\Settings',
-                'category'    => 'rainlab.blog::lang.blog.menu_label',
+                'category'    => 'winter.blog::lang.blog.menu_label',
                 'permissions' => ['numencode.blogextension.manage_settings'],
             ],
         ];

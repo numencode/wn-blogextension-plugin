@@ -1,8 +1,8 @@
 <?php namespace NumenCode\BlogExtension\Models;
 
 use Model;
-use RainLab\Blog\Models\Post;
-use October\Rain\Database\Traits\Sluggable;
+use Winter\Blog\Models\Post;
+use Winter\Storm\Database\Traits\Sluggable;
 
 class Tag extends Model
 {

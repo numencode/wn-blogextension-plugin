@@ -1,8 +1,8 @@
 <?php namespace NumenCode\BlogExtension\Models;
 
 use Model;
-use October\Rain\Database\Traits\Sortable;
-use October\Rain\Database\Traits\Validation;
+use Winter\Storm\Database\Traits\Sortable;
+use Winter\Storm\Database\Traits\Validation;
 
 class Picture extends Model
 {
@@ -10,7 +10,7 @@ class Picture extends Model
 
     public $table = 'numencode_blogextension_pictures';
 
-    public $implement = ['@RainLab.Translate.Behaviors.TranslatableModel'];
+    public $implement = ['@Winter.Translate.Behaviors.TranslatableModel'];
 
     public $rules = [];
 

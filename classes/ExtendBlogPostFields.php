@@ -2,7 +2,7 @@
 
 use Event;
 use BackendAuth;
-use RainLab\Blog\Models\Post;
+use Winter\Blog\Models\Post;
 use NumenCode\Fundamentals\Bootstrap\ConfigOverride;
 use NumenCode\BlogExtension\Models\Settings as BlogSettings;
 
@@ -41,7 +41,7 @@ class ExtendBlogPostFields
             if ($this->hasTagsAccess()) {
                 $config['secondaryTabs']['fields'] = array_merge($config['secondaryTabs']['fields'], [
                     'tags' => [
-                        'tab'   => 'rainlab.blog::lang.post.tab_categories',
+                        'tab'   => 'winter.blog::lang.post.tab_categories',
                         'label' => 'numencode.blogextension::lang.tags.label',
                         'type'  => 'taglist',
                         'mode'  => 'relation',
@@ -152,17 +152,17 @@ class ExtendBlogPostFields
         }
 
         Event::listen('backend.form.extendFields', function ($form) {
-            if ($form->model instanceof \RainLab\Blog\Models\Post) {
+            if ($form->model instanceof \Winter\Blog\Models\Post) {
                 $replaceable = [
                     'codeeditor',
                     'richeditor',
-                    'RainLab\Blog\FormWidgets\BlogMarkdown',
-                    'RainLab\Blog\FormWidgets\MLBlogMarkdown',
+                    'Winter\Blog\FormWidgets\BlogMarkdown',
+                    'Winter\Blog\FormWidgets\MLBlogMarkdown',
                     'mlricheditor',
                 ];
 
                 $multilingual = [
-                    'RainLab\Blog\FormWidgets\MLBlogMarkdown',
+                    'Winter\Blog\FormWidgets\MLBlogMarkdown',
                     'mlricheditor',
                 ];
 

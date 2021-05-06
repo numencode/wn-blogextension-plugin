@@ -23,6 +23,6 @@ class Tags extends Controller
     {
         parent::__construct();
 
-        BackendMenu::setContext('RainLab.Blog', 'blog', 'tags');
+        BackendMenu::setContext('Winter.Blog', 'blog', 'tags');
     }
 }

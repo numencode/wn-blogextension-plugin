@@ -1,6 +1,6 @@
 <?php namespace NumenCode\BlogExtension\Classes;
 
-use RainLab\Blog\Models\Category;
+use Winter\Blog\Models\Category;
 use NumenCode\Fundamentals\Bootstrap\ConfigOverride;
 
 class ExtendBlogCategoryColumns

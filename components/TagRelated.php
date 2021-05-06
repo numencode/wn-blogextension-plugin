@@ -2,7 +2,7 @@
 
 use DB;
 use Cms\Classes\Page;
-use Rainlab\Blog\Models\Post;
+use Winter\Blog\Models\Post;
 use Cms\Classes\ComponentBase;
 
 class TagRelated extends ComponentBase
@@ -24,8 +24,8 @@ class TagRelated extends ComponentBase
     {
         return [
             'slug'          => [
-                'title'       => 'rainlab.blog::lang.settings.post_slug',
-                'description' => 'rainlab.blog::lang.settings.post_slug_description',
+                'title'       => 'winter.blog::lang.settings.post_slug',
+                'description' => 'winter.blog::lang.settings.post_slug_description',
                 'default'     => '{{ :slug }}',
                 'type'        => 'string',
             ],
@@ -93,7 +93,7 @@ class TagRelated extends ComponentBase
 
         $orderBy = DB::raw('(
             SELECT COUNT(*) FROM `numencode_blogextension_posts_tags`
-            WHERE `numencode_blogextension_posts_tags`.`post_id` = `rainlab_blog_posts`.`id`
+            WHERE `numencode_blogextension_posts_tags`.`post_id` = `winter_blog_posts`.`id`
             AND `numencode_blogextension_posts_tags`.`tag_id` IN (' . implode(', ', $tagIds) . '))');
 
         $query->orderby($orderBy, 'desc');

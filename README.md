@@ -1,6 +1,6 @@
 # Blog Extension Plugin
 
-NumenCode Blog Extension for RainLab.Blog plugin for October CMS.
+NumenCode Blog Extension for Winter.Blog plugin for Winter CMS.
 
 # Author
 

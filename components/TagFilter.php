@@ -1,7 +1,7 @@
 <?php namespace NumenCode\BlogExtension\Components;
 
 use Cms\Classes\Page;
-use Rainlab\Blog\Models\Post;
+use Winter\Blog\Models\Post;
 use Cms\Classes\ComponentBase;
 use NumenCode\BlogExtension\Models\Tag;
 
@@ -32,22 +32,22 @@ class TagFilter extends ComponentBase
                 'default'     => '{{ :slug }}',
             ],
             'pageNumber'    => [
-                'title'       => 'rainlab.blog::lang.settings.posts_pagination',
-                'description' => 'rainlab.blog::lang.settings.posts_pagination_description',
+                'title'       => 'winter.blog::lang.settings.posts_pagination',
+                'description' => 'winter.blog::lang.settings.posts_pagination_description',
                 'type'        => 'string',
                 'default'     => '{{ :page }}',
             ],
             'postsPerPage'  => [
-                'title'             => 'rainlab.blog::lang.settings.posts_per_page',
+                'title'             => 'winter.blog::lang.settings.posts_per_page',
                 'type'              => 'string',
                 'validationPattern' => '^[0-9]+$',
-                'validationMessage' => 'rainlab.blog::lang.settings.posts_per_page_validation',
+                'validationMessage' => 'winter.blog::lang.settings.posts_per_page_validation',
                 'default'           => '10',
                 'showExternalParam' => false,
             ],
             'sortOrder'     => [
-                'title'             => 'rainlab.blog::lang.settings.posts_order',
-                'description'       => 'rainlab.blog::lang.settings.posts_order_description',
+                'title'             => 'winter.blog::lang.settings.posts_order',
+                'description'       => 'winter.blog::lang.settings.posts_order_description',
                 'type'              => 'dropdown',
                 'default'           => 'published_at desc',
                 'showExternalParam' => false,

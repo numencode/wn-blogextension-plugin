@@ -78,7 +78,7 @@ tabs:
             tab: numencode.blogextension::lang.tabs.rss_feed
             label: numencode.blogextension::lang.settings.rss_feed.generator_label
             comment: numencode.blogextension::lang.settings.rss_feed.generator_comment
-            placeholder: 'October CMS'
+            placeholder: 'Winter CMS'
             type: text
 
         rss_feed_language:

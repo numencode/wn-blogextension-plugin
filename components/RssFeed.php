@@ -2,10 +2,10 @@
 
 use Response;
 use Carbon\Carbon;
-use RainLab\Blog\Components\RssFeed as RainLabRssFeed;
+use Winter\Blog\Components\RssFeed as WinterRssFeed;
 use NumenCode\BlogExtension\Models\Settings as BlogSettings;
 
-class RssFeed extends RainLabRssFeed
+class RssFeed extends WinterRssFeed
 {
     public $channel;
 
@@ -19,8 +19,8 @@ class RssFeed extends RainLabRssFeed
 
     public function onRun()
     {
-        if (plugin_exists('RainLab.Translate')) {
-            $translator = \RainLab\Translate\Classes\Translator::instance();
+        if (plugin_exists('Winter.Translate')) {
+            $translator = \Winter\Translate\Classes\Translator::instance();
             $language = $translator->getLocale();
         }
 
