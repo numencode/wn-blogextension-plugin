@@ -21,15 +21,15 @@ class ExtendBlogPostFields
     protected function beautifyForm()
     {
         ConfigOverride::extendFields(Post::class, function ($config) {
-            $config['secondaryTabs']['fields']['published']['span'] = 'auto';
-            $config['secondaryTabs']['fields']['published']['comment'] = 'numencode.fundamentals::lang.field.is_published_comment';
-            $config['secondaryTabs']['fields']['user']['span'] = 'auto';
-            $config['secondaryTabs']['fields']['published_at']['span'] = 'auto';
-            $config['secondaryTabs']['fields']['excerpt']['span'] = 'full';
-            $config['secondaryTabs']['fields']['categories']['span'] = 'auto';
+            $config['tabs']['fields']['published']['span'] = 'auto';
+            $config['tabs']['fields']['published']['comment'] = 'numencode.fundamentals::lang.field.is_published_comment';
+            $config['tabs']['fields']['user']['span'] = 'auto';
+            $config['tabs']['fields']['published_at']['span'] = 'auto';
+            $config['tabs']['fields']['excerpt']['span'] = 'full';
+            $config['tabs']['fields']['categories']['span'] = 'auto';
 
-            $config['secondaryTabs']['fields'] = array_move_element_before($config['secondaryTabs']['fields'], 'user', 'published_at');
-            $config['secondaryTabs']['fields'] = array_move_element_before($config['secondaryTabs']['fields'], 'user', 'excerpt');
+            $config['tabs']['fields'] = array_before($config['tabs']['fields'], 'user', 'published_at');
+            $config['tabs']['fields'] = array_before($config['tabs']['fields'], 'user', 'excerpt');
 
             return $config;
         });
@@ -39,13 +39,13 @@ class ExtendBlogPostFields
     {
         ConfigOverride::extendFields(Post::class, function ($config) {
             if ($this->hasTagsAccess()) {
-                $config['secondaryTabs']['fields'] = array_merge($config['secondaryTabs']['fields'], [
+                $config['tabs']['fields'] = array_merge($config['tabs']['fields'], [
                     'tags' => [
                         'tab'   => 'winter.blog::lang.post.tab_categories',
                         'label' => 'numencode.blogextension::lang.tags.label',
                         'type'  => 'taglist',
                         'mode'  => 'relation',
-                        'span'  => 'full',
+                        'span'  => 'auto',
                     ],
                 ]);
             }
@@ -58,9 +58,9 @@ class ExtendBlogPostFields
     {
         ConfigOverride::extendFields(Post::class, function ($config) {
             if ($this->hasPicturesAccess()) {
-                unset($config['secondaryTabs']['fields']['featured_images']);
+                unset($config['tabs']['fields']['featured_images']);
 
-                $config['secondaryTabs']['fields'] = array_merge($config['secondaryTabs']['fields'], [
+                $config['tabs']['fields'] = array_merge($config['tabs']['fields'], [
                     'pictures_list' => [
                         'tab'   => 'numencode.blogextension::lang.tabs.pictures',
                         'label' => 'numencode.blogextension::lang.pictures.gallery',
@@ -104,7 +104,7 @@ class ExtendBlogPostFields
     {
         ConfigOverride::extendFields(Post::class, function ($config) {
             if ($this->hasFilesAccess()) {
-                $config['secondaryTabs']['fields'] = array_merge($config['secondaryTabs']['fields'], [
+                $config['tabs']['fields'] = array_merge($config['tabs']['fields'], [
                     'files_list' => [
                         'tab'   => 'numencode.blogextension::lang.tabs.files',
                         'label' => 'numencode.blogextension::lang.files.label',
@@ -185,8 +185,8 @@ class ExtendBlogPostFields
         }
 
         ConfigOverride::extendFields(Post::class, function ($config) {
-            $config['secondaryTabs']['fields']['excerpt']['type'] = 'richeditor';
-            $config['secondaryTabs']['fields']['excerpt']['size'] = 'large';
+            $config['tabs']['fields']['excerpt']['type'] = 'richeditor';
+            $config['tabs']['fields']['excerpt']['size'] = 'large';
 
             return $config;
         });

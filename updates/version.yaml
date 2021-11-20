@@ -7,15 +7,8 @@
     - 'Created table numencode_blogextension_files'
     - create_numencode_blogextension_files_table.php
 1.0.4:
-    - 'Settings for Blog Extension created'
-1.0.5:
-    - 'WYSIWYG editors added'
-1.0.6:
-    - 'Blog breadcrumbs added'
-1.0.7:
-    - 'Advanced RSS feed added'
-1.0.8:
-    - 'Blog tags added'
+    - 'Created table numencode_blogextension_tags_table'
     - create_numencode_blogextension_tags_table.php
-1.0.9:
-    - 'Faker added'
+1.0.5:
+    - 'Created table numencode_blogextension_posts_tags'
+    - create_numencode_blogextension_posts_tags_table.php
