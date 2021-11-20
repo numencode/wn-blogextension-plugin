@@ -31,17 +31,17 @@ class Plugin extends PluginBase
         ];
     }
 
-    public function register()
-    {
-        //
-    }
-
     public function boot()
     {
         (new ExtendBlogNavigation())->init();
         (new ExtendBlogPostModel())->init();
         (new ExtendBlogPostFields())->init();
         (new ExtendBlogCategoryColumns())->init();
+    }
+
+    public function register()
+    {
+        //
     }
 
     public function registerPermissions(): array
