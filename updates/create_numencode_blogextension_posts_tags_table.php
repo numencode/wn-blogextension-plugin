@@ -3,7 +3,7 @@
 use Schema;
 use Winter\Storm\Database\Updates\Migration;
 
-class CreateNumencodeBlogextensionTagsTable extends Migration
+class CreateNumencodeBlogextensionPostsTagsTable extends Migration
 {
     public function up()
     {
