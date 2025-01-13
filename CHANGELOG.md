@@ -1,19 +1,18 @@
 # Changelog
 
-All notable changes to `numencode/wn-blogextension-plugin` will be documented in this file
+All notable changes to this project will be documented in this file.
 
-## 2.0.1 - 2021-11-20
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-- content update
+## [1.0.0] - 2025-02-08
+### Added
+- Initial release of the **Blog Extension Plugin**.
+- Features:
+  - Support for Winter CMS.
+  - Fully compatible with Winter CMS version `1.2.7`.
 
-## 2.0.0 - 2021-05-06
+---
 
-- migration to Winter CMS
-
-## 1.1.0 - 2021-02-04
-
-- Faker added
-
-## 1.0.0 - 2021-01-28
-
-- initial release
+### Links
+- GitHub repository: [wn-blogextension-plugin](https://github.com/numencode/wn-blogextension-plugin)

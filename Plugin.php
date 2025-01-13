@@ -27,7 +27,7 @@ class Plugin extends PluginBase
             'description' => 'numencode.blogextension::lang.plugin.description',
             'author'      => 'Blaz Orazem',
             'icon'        => 'icon-pencil-square-o',
-            'homepage'    => 'https://github.com/numencode/blogextension-plugin',
+            'homepage'    => 'https://github.com/numencode/wn-blogextension-plugin',
         ];
     }
 

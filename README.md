@@ -1,57 +1,98 @@
 # Blog Extension Plugin
 
-NumenCode Blog Extension for Winter.Blog plugin for Winter CMS.
+The **NumenCode Blog Extension** plugin for Winter CMS enhances the functionality of the original Winter CMS
+Blog Plugin by adding a variety of useful features designed to improve the blog post management experience.
+These features can be easily enabled in the CMS or used as components, offering flexibility for both
+developers and content creators.
 
-## Installation and usage
+[![Version](https://img.shields.io/github/v/release/numencode/wn-blogextension-plugin?sort=semver&style=flat-square&color=0099FF)](https://github.com/numencode/wn-blogextension-plugin/releases)
+[![Packagist PHP Version Support](https://img.shields.io/packagist/php-v/numencode/wn-blogextension-plugin?style=flat-square&color=0099FF)](https://packagist.org/packages/numencode/wn-blogextension-plugin)
+[![Checks](https://img.shields.io/github/check-runs/numencode/wn-blogextension-plugin/main?style=flat-square)](https://github.com/numencode/wn-blogextension-plugin/actions)
+[![Tests](https://img.shields.io/github/actions/workflow/status/numencode/wn-blogextension-plugin/main.yml?branch=main&label=tests&style=flat-square)](https://github.com/numencode/wn-blogextension-plugin/actions)
+[![License](https://img.shields.io/github/license/numencode/wn-blogextension-plugin?label=open%20source&style=flat-square&color=0099FF)](https://github.com/numencode/wn-blogextension-plugin/blob/main/LICENSE.md)
 
-This package requires [Winter CMS Blog Plugin](https://github.com/wintercms/wn-blog-plugin) version ^2.0 or higher
-installed in your [Winter CMS](https://wintercms.com/) application.
+---
 
-Install the package with Composer:
+## Target Audience
+
+The NumenCode Blog Extension plugin is designed for Winter CMS users who want to extend the functionality of their
+blog with enhanced features. It is ideal for developers looking to add dynamic components to their blog posts, as well
+as content creators who need a more user-friendly editing experience. This plugin caters to website owners and agencies
+seeking a customizable and feature-rich blogging system, offering tools to manage media, improve SEO with tags and
+breadcrumbs, and streamline content creation with WYSIWYG editors. Whether you're building a personal blog, a corporate
+website, or an online magazine, this extension provides the flexibility to meet various blogging needs.
+
+## Installation
+
+This plugin is available for installation via [Composer](http://getcomposer.org/).
 
 ```bash
 composer require numencode/wn-blogextension-plugin
 ```
 
-## Details
+After installing the plugin you will need to run the migrations.
 
-This plugin in an extension which provides some additional features to the original [Winter CMS Blog Plugin](https://github.com/wintercms/wn-blog-plugin),
-such as nicer display of the blog post editing area in the CMS and:
+```bash
+php artisan winter:up
+```
 
-- Picture Gallery on the blog post
-- File attachments on the blog post
-- Blog post tags - with tag list, tag-related posts, etc.
-- WYSIWYG content - replace blog post markdown content with WYSIWYG editor
-- WYSIWYG excerpt - replace blog post excerpt with WYSIWYG editor
-- RSS Feed - fully configurable XML feed
-- Faker - content faker for blog categories, posts and media
-- Breadcrumbs - a proper breadcrumbs' system for the blog posts
-- Reading time - display a reading time on the blog post
+## Requirements
 
-All the above features can be enabled in the CMS or used as components, depending on your requirements.
+* [Winter CMS Blog Plugin](https://github.com/wintercms/wn-blog-plugin) version ^2.1 or higher.
+* [NumenCode Fundamentals Plugin](https://github.com/numencode/wn-fundamentals-plugin) version ^1.0 or higher.
+* [Winter CMS](https://wintercms.com/) 1.2.7 or higher.
+* PHP version 8.0 or higher.
 
-# Changelog
+---
 
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
+## Features Overview
 
-# Contributing
+This plugin in the extension for the original [Winter CMS Blog Plugin](https://github.com/wintercms/wn-blog-plugin)
+which provides a variety of useful features designed to improve the blog post management experience.
 
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+This extension introduces a more user-friendly CMS interface for blog post editing, along with powerful additions such as:
+- **Picture Gallery** for blog posts
+- **File attachments** for each blog post
+- **Tagging system** with related posts and tag lists
+- **WYSIWYG editor** for both blog content and excerpts
+- **RSS feed** which is fully customizable
+- **Content faker** for blog categories, posts, and media
+- **Breadcrumbs navigation** for blog posts
+- **Estimated reading time** display for blog posts
 
-# Security
+All these features can be easily enabled through the CMS or integrated into your templates as components,
+offering flexibility and convenience for developers and content creators alike.
 
-If you discover any security-related issues, please email info@numencode.com instead of using the issue tracker.
+---
 
-# Author
+## Changelog
 
-**NumenCode.BlogExtension** plugin was created by and is maintained by [Blaz Orazem](https://orazem.si/).
+All notable changes are documented in the [CHANGELOG](CHANGELOG.md).
 
-Please write an email to info@numencode.com about all the things concerning this project.
+---
 
-Follow [@blazorazem](https://twitter.com/blazorazem) on Twitter.
+## Contributing
 
-# License
+Please refer to the [CONTRIBUTING](CONTRIBUTING.md) guide for details on contributing to this project.
+
+---
+
+## Security
+
+If you identify any security issues, email info@numencode.com rather than using the issue tracker.
+
+---
+
+## Author
+
+The **NumenCode.BlogExtension** plugin is created and maintained by [Blaz Orazem](https://orazem.si/).
+
+For inquiries, contact: info@numencode.com
+
+---
+
+## License
 
 This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
-[![MIT License](https://img.shields.io/github/license/numencode/blogextension-plugin?label=License&color=blue&style=flat-square&cacheSeconds=600)](https://github.com/numencode/blogextension-plugin/blob/main/LICENSE.md)
+[![License](https://img.shields.io/github/license/numencode/wn-blogextension-plugin?style=flat-square&color=0099FF)](https://github.com/numencode/wn-blogextension-plugin/blob/main/LICENSE.md)

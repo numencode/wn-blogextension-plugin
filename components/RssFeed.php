@@ -1,7 +1,7 @@
 <?php namespace NumenCode\BlogExtension\Components;
 
-use Response;
 use Carbon\Carbon;
+use Illuminate\Http\Response as HttpResponse;
 use Winter\Blog\Components\RssFeed as WinterRssFeed;
 use NumenCode\BlogExtension\Models\Settings as BlogSettings;
 
@@ -17,7 +17,7 @@ class RssFeed extends WinterRssFeed
         ];
     }
 
-    public function onRun()
+    public function onRun(): HttpResponse
     {
         if (plugin_exists('Winter.Translate')) {
             $translator = \Winter\Translate\Classes\Translator::instance();
@@ -41,6 +41,6 @@ class RssFeed extends WinterRssFeed
 
         $xmlFeed = $this->renderPartial('@default');
 
-        return Response::make($xmlFeed, '200')->header('Content-Type', 'text/xml');
+        return HttpResponse::make($xmlFeed, '200')->header('Content-Type', 'text/xml');
     }
 }

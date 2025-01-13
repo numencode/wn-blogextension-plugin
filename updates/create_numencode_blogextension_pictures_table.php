@@ -15,7 +15,7 @@ class CreateNumencodeBlogextensionPicturesTable extends Migration
             $table->string('title')->nullable();
             $table->string('picture')->nullable();
             $table->boolean('is_published');
-            $table->integer('sort_order');
+            $table->integer('sort_order')->nullable();
             $table->timestamps();
         });
     }
