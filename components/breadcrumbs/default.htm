@@ -1,26 +1,18 @@
-{% set blogBreadcrumbs = __SELF__.blogBreadcrumbs %}
-{% set compatibility = __SELF__.compatibility %}
-{% set divider = __SELF__.divider %}
+{% set breadcrumbs = __SELF__.breadcrumbs %}
 
-{% if blogBreadcrumbs and not compatibility %}
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-            <a href="/">{{ 'Home'|_ }}</a>
-            {% if divider %}
-                <span class="breadcrumb-divider">{{ divider }}</span>
-            {% endif %}
-        </li>
-        {% for breadcrumb in blogBreadcrumbs %}
-            <li class="breadcrumb-item {{ breadcrumb.isActive ? 'active' : '' }}">
-                {% if breadcrumb.isActive %}
-                    {{ breadcrumb.title }}
-                {% else %}
-                    <a href="{{ breadcrumb.url }}">{{ breadcrumb.title }}</a>
-                {% endif %}
-                {% if divider and not breadcrumb.isActive %}
-                    <span class="breadcrumb-divider">{{ divider }}</span>
-                {% endif %}
+{% if breadcrumbs %}
+    <nav aria-label="{{ 'numencode.blogextension::lang.frontend.breadcrumbs'|trans }}"{% if __SELF__.divider %} style="--bs-breadcrumb-divider: '{{ __SELF__.divider|e('css') }}';"{% endif %}>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{{ '/'|app }}">{{ 'numencode.blogextension::lang.frontend.home'|trans }}</a>
             </li>
-        {% endfor %}
-    </ol>
+            {% for breadcrumb in breadcrumbs %}
+                {% if breadcrumb.isActive or not breadcrumb.url %}
+                    <li class="breadcrumb-item{{ breadcrumb.isActive ? ' active' }}"{% if breadcrumb.isActive %} aria-current="page"{% endif %}>{{ breadcrumb.title }}</li>
+                {% else %}
+                    <li class="breadcrumb-item"><a href="{{ breadcrumb.url }}">{{ breadcrumb.title }}</a></li>
+                {% endif %}
+            {% endfor %}
+        </ol>
+    </nav>
 {% endif %}

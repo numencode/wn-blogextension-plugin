@@ -3,15 +3,16 @@
 # ===================================
 
 fields:
-    id:
-        span: auto
-        cssClass: hidden
-        type: number
     name:
-        label: 'numencode.blogextension::lang.tags.name'
+        label: 'numencode.fundamentals::lang.field.title'
+        type: text
         span: left
+        required: true
     slug:
-        label: 'numencode.blogextension::lang.tags.slug'
-        disabled: true
-        preset: name
+        label: 'numencode.fundamentals::lang.field.slug'
+        type: text
         span: right
+        required: true
+        preset:
+            field: name
+            type: slug

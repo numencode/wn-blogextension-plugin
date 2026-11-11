@@ -1,7 +1,13 @@
 {% set tags = __SELF__.tags %}
 
-{% for tag in tags %}
-    <a href="{{ tag.url ?: '#' }}" class="btn btn-secondary btn-sm mb-1 {{ tag.url ?: 'disabled' }}">
-        {{ tag.name }}
-    </a>
-{% endfor %}
+{% if tags is not empty %}
+    <div class="blog-post-tags d-flex flex-wrap gap-1">
+        {% for tag in tags %}
+            {% if tag.url %}
+                <a href="{{ tag.url }}" class="btn btn-outline-secondary btn-sm">{{ tag.name }}</a>
+            {% else %}
+                <span class="badge text-bg-secondary">{{ tag.name }}</span>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endif %}

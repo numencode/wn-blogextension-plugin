@@ -1,43 +1,54 @@
-<?php namespace NumenCode\BlogExtension\Components;
+<?php
 
-use Cms\Classes\Page;
-use Winter\Blog\Models\Post;
-use Cms\Classes\ComponentBase;
+declare(strict_types=1);
+
+namespace NumenCode\BlogExtension\Components;
+
+use Event;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Lang;
+use NumenCode\BlogExtension\Classes\BlogComponent;
 use NumenCode\BlogExtension\Models\Tag;
+use Redirect;
+use Winter\Blog\Models\Post;
 
-class TagFilter extends ComponentBase
+/**
+ * The published posts of a tag (selected by its slug), paginated. An unknown tag shows the 404 page.
+ */
+class TagFilter extends BlogComponent
 {
-    public $tag;
-    public $slug;
-    public $posts;
-    public $postPage;
-    public $pageParam;
-    public $categoryPage;
+    public ?Tag $tag = null;
+
+    public ?LengthAwarePaginator $posts = null;
+
+    public ?string $pageParam = null;
+
+    public ?string $noPostsMessage = null;
 
     public function componentDetails(): array
     {
         return [
-            'name'        => 'numencode.blogextension::lang.tag_filter.name',
-            'description' => 'numencode.blogextension::lang.tag_filter.description',
+            'name'        => self::LANG . 'tag_filter.name',
+            'description' => self::LANG . 'tag_filter.description',
         ];
     }
 
     public function defineProperties(): array
     {
         return [
-            'slug'          => [
-                'title'       => 'numencode.blogextension::lang.tag_filter.slug_title',
-                'description' => 'numencode.blogextension::lang.tag_filter.slug_description',
+            'slug'           => [
+                'title'       => self::LANG . 'properties.tag_slug',
+                'description' => self::LANG . 'properties.tag_slug_description',
                 'type'        => 'string',
                 'default'     => '{{ :slug }}',
             ],
-            'pageNumber'    => [
+            'pageNumber'     => [
                 'title'       => 'winter.blog::lang.settings.posts_pagination',
                 'description' => 'winter.blog::lang.settings.posts_pagination_description',
                 'type'        => 'string',
                 'default'     => '{{ :page }}',
             ],
-            'postsPerPage'  => [
+            'postsPerPage'   => [
                 'title'             => 'winter.blog::lang.settings.posts_per_page',
                 'type'              => 'string',
                 'validationPattern' => '^[0-9]+$',
@@ -45,115 +56,84 @@ class TagFilter extends ComponentBase
                 'default'           => '10',
                 'showExternalParam' => false,
             ],
-            'sortOrder'     => [
+            'sortOrder'      => [
                 'title'             => 'winter.blog::lang.settings.posts_order',
                 'description'       => 'winter.blog::lang.settings.posts_order_description',
                 'type'              => 'dropdown',
                 'default'           => 'published_at desc',
                 'showExternalParam' => false,
             ],
-            'postPage'      => [
-                'title'       => 'numencode.blogextension::lang.pages.post_title',
-                'description' => 'numencode.blogextension::lang.pages.post_description',
-                'type'        => 'dropdown',
-                'default'     => 'blog/post',
-                'group'       => 'numencode.blogextension::lang.groups.links',
-            ],
-            'categoryPage'  => [
-                'title'       => 'numencode.blogextension::lang.pages.category_title',
-                'description' => 'numencode.blogextension::lang.pages.category_description',
-                'type'        => 'dropdown',
-                'default'     => 'blog/category',
-                'group'       => 'numencode.blogextension::lang.groups.links',
-            ],
-            'tagFilterPage' => [
-                'title'       => 'numencode.blogextension::lang.pages.tag_filter_title',
-                'description' => 'numencode.blogextension::lang.pages.tag_filter_description',
-                'type'        => 'dropdown',
-                'placeholder' => 'blog/tag',
-                'group'       => 'numencode.blogextension::lang.groups.links',
-            ],
+            'noPostsMessage' => $this->noPostsMessageProperty(),
+            'postPage'       => $this->pageProperty('post', 'blog/post'),
+            'categoryPage'   => $this->pageProperty('category', 'blog/category'),
+            'tagPage'        => $this->pageProperty('tag', 'blog/tag'),
         ];
+    }
+
+    public function init()
+    {
+        // The locale picker (Winter.Translate) switches to the tag's slug in the new language
+        Event::listen('translate.localePicker.translateParams', function ($page, $params, $oldLocale, $newLocale) {
+            $paramName = $this->paramName('slug');
+
+            if (!$paramName || !isset($params[$paramName])) {
+                return null;
+            }
+
+            $tag = Tag::transWhere('slug', $params[$paramName], $oldLocale)->first();
+
+            return $tag ? [$paramName => $tag->getAttributeTranslated('slug', $newLocale)] + $params : null;
+        });
     }
 
     public function onRun()
     {
-        $this->prepareVars();
-
-        $this->tag = $this->loadTag();
-        $this->posts = $this->loadPosts();
-    }
-
-    protected function prepareVars()
-    {
         $this->pageParam = $this->page['pageParam'] = $this->paramName('pageNumber');
-        $this->slug = $this->page['slug'] = $this->property('slug');
-        $this->postPage = $this->page['postPage'] = $this->property('postPage');
-        $this->categoryPage = $this->page['categoryPage'] = $this->property('categoryPage');
+        $this->noPostsMessage = $this->page['noPostsMessage'] = $this->property('noPostsMessage');
+
+        $this->tag = $this->page['tag'] = Tag::findBySlug($this->property('slug'));
+
+        if (!$this->tag) {
+            return $this->notFound();
+        }
+
+        $currentPage = $this->property('pageNumber') ?: 1;
+
+        if (!is_numeric($currentPage) || (int) $currentPage < 1) {
+            return $this->notFound();
+        }
+
+        $this->posts = $this->page['posts'] = $this->listPosts((int) $currentPage);
+
+        if ($this->pageParam && (int) $currentPage > 1 && (int) $currentPage > $this->posts->lastPage()) {
+            return Redirect::to($this->currentPageUrl([$this->pageParam => $this->posts->lastPage()]));
+        }
     }
 
-    protected function loadTag()
+    protected function listPosts(int $page): LengthAwarePaginator
     {
-        return Tag::where('slug', $this->property('slug'))->first();
-    }
+        $posts = Post::with($this->postRelations())
+            ->whereHas('tags', fn ($tags) => $tags->where('numencode_blogextension_tags.id', $this->tag->id))
+            ->listFrontEnd([
+                'page'    => $page,
+                'sort'    => $this->property('sortOrder'),
+                'perPage' => (int) $this->property('postsPerPage') ?: 10,
+            ]);
 
-    protected function loadPosts()
-    {
-        $posts = Post::with(['tags', 'categories'])
-            ->whereHas('tags', function ($tag) {
-                $tag->whereSlug($this->property('slug'));
-            })
-            ->listFrontEnd(
-                [
-                    'page'    => $this->property('pageNumber'),
-                    'sort'    => $this->property('sortOrder'),
-                    'perPage' => $this->property('postsPerPage'),
-                ]
-            );
-
-        $posts->each(function ($post) {
-            $post->setUrl($this->postPage, $this->controller);
-
-            $post->categories->each(function ($tag) {
-                $tag->setUrl($this->categoryPage, $this->controller);
-            });
-
-            if ($tagFilterPage = $this->property('tagFilterPage')) {
-                $post->tags->each(function ($tag) use ($tagFilterPage) {
-                    $tag->setUrl($tagFilterPage, $this->controller);
-                });
-            }
-        });
+        $this->setPostUrls($posts);
 
         return $posts;
     }
 
+    protected function notFound()
+    {
+        $this->setStatusCode(404);
+
+        return $this->controller->run('404');
+    }
+
     public function getSortOrderOptions(): array
     {
-        return [
-            'title asc'         => 'numencode.blogextension::lang.sorting.title_asc',
-            'title desc'        => 'numencode.blogextension::lang.sorting.title_desc',
-            'published_at asc'  => 'numencode.blogextension::lang.sorting.published_asc',
-            'published_at desc' => 'numencode.blogextension::lang.sorting.published_desc',
-            'created_at asc'    => 'numencode.blogextension::lang.sorting.created_asc',
-            'created_at desc'   => 'numencode.blogextension::lang.sorting.created_desc',
-            'updated_at asc'    => 'numencode.blogextension::lang.sorting.updated_asc',
-            'updated_at desc'   => 'numencode.blogextension::lang.sorting.updated_desc',
-        ];
-    }
-
-    public function getPostPageOptions(): array
-    {
-        return Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
-    }
-
-    public function getCategoryPageOptions(): array
-    {
-        return Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
-    }
-
-    public function getTagFilterPageOptions(): array
-    {
-        return array_merge([false => '---'], Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName'));
+        return array_map(fn (string $key): string => Lang::get($key), Post::$allowedSortingOptions);
     }
 }

@@ -12,3 +12,6 @@
 1.0.5:
     - 'Created table numencode_blogextension_posts_tags'
     - create_numencode_blogextension_posts_tags_table.php
+2.0.0:
+    - '!!! Rewrite on NumenCode.Fundamentals 2.1: relation repeaters for pictures and files, translatable tag names and slugs, published-only pictures and files, a dev-only Faker page, a cleaned-up component API with Bootstrap 5 templates, tag menu items for Winter.Pages. Requires PHP 8.2+. See the upgrade guide in CHANGELOG.md.'
+    - v2_0_0_upgrade_tables.php

@@ -1,0 +1,23 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+    id:
+        type: number
+        cssClass: hidden
+    picture:
+        label: 'numencode.fundamentals::lang.field.picture'
+        type: mediafinder
+        mode: image
+        span: left
+    title:
+        label: 'numencode.fundamentals::lang.field.title'
+        type: text
+        span: right
+    is_published:
+        label: 'numencode.fundamentals::lang.field.is_published'
+        comment: 'numencode.fundamentals::lang.field.is_published_comment'
+        type: switch
+        default: true
+        span: right

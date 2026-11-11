@@ -1,163 +1,109 @@
-<?php namespace NumenCode\BlogExtension\Components;
+<?php
 
-use Cms\Classes\Page;
-use Winter\Blog\Models\Post;
-use Cms\Classes\ComponentBase;
+declare(strict_types=1);
+
+namespace NumenCode\BlogExtension\Components;
+
+use NumenCode\BlogExtension\Classes\BlogComponent;
 use Winter\Blog\Models\Category;
+use Winter\Blog\Models\Post;
 
-class Breadcrumbs extends ComponentBase
+/**
+ * Breadcrumbs of a blog category page (Winter.Blog blogPosts with a category) or a blog post page (blogPost):
+ * the category path and the post. Also available to the page as the "breadcrumbs" variable.
+ */
+class Breadcrumbs extends BlogComponent
 {
-    protected $categories;
+    /**
+     * @var array<int, array{title: string, url: string|null, isActive: bool}>
+     */
+    public array $breadcrumbs = [];
 
-    public $blogBreadcrumbs;
-    public $compatibility;
-    public $divider;
+    public ?string $divider = null;
 
     public function componentDetails(): array
     {
         return [
-            'name'        => 'numencode.blogextension::lang.breadcrumbs.name',
-            'description' => 'numencode.blogextension::lang.breadcrumbs.description',
+            'name'        => self::LANG . 'breadcrumbs.name',
+            'description' => self::LANG . 'breadcrumbs.description',
         ];
     }
 
     public function defineProperties(): array
     {
         return [
-            'categoryPage'  => [
-                'title'       => 'numencode.blogextension::lang.pages.category_title',
-                'description' => 'numencode.blogextension::lang.pages.category_description',
-                'type'        => 'dropdown',
-                'default'     => 'blog/category',
-            ],
-            'categoryAlias' => [
-                'title'             => 'numencode.blogextension::lang.aliases.category_title',
-                'description'       => 'numencode.blogextension::lang.aliases.category_description',
+            'categoryPage' => $this->pageProperty('category', 'blog/category'),
+            'postsAlias'   => [
+                'title'             => self::LANG . 'properties.posts_alias',
+                'description'       => self::LANG . 'properties.posts_alias_description',
                 'type'              => 'string',
                 'default'           => 'blogPosts',
                 'showExternalParam' => false,
             ],
-            'postAlias'     => [
-                'title'             => 'numencode.blogextension::lang.aliases.post_title',
-                'description'       => 'numencode.blogextension::lang.aliases.post_description',
+            'postAlias'    => $this->postAliasProperty(),
+            'divider'      => [
+                'title'             => self::LANG . 'properties.divider',
+                'description'       => self::LANG . 'properties.divider_description',
                 'type'              => 'string',
-                'default'           => 'blogPost',
-                'showExternalParam' => false,
-            ],
-            'compatibility' => [
-                'title'             => 'numencode.blogextension::lang.breadcrumbs.compatibility_title',
-                'description'       => 'numencode.blogextension::lang.breadcrumbs.compatibility_description',
-                'type'              => 'checkbox',
-                'showExternalParam' => false,
-            ],
-            'divider'       => [
-                'title'             => 'numencode.blogextension::lang.breadcrumbs.divider_title',
-                'description'       => 'numencode.blogextension::lang.breadcrumbs.divider_description',
-                'type'              => 'string',
+                'default'           => '',
                 'showExternalParam' => false,
             ],
         ];
     }
 
-    public function init()
+    protected function prepare(): void
     {
-        $this->categories = Category::all();
+        $this->divider = (string) $this->property('divider') ?: null;
+        $this->breadcrumbs = $this->page['breadcrumbs'] = $this->buildBreadcrumbs();
     }
 
-    public function onRun()
+    /**
+     * @return array<int, array{title: string, url: string|null, isActive: bool}>
+     */
+    protected function buildBreadcrumbs(): array
     {
-        $categoryPath = [];
-        $categoryAlias = $this->property('categoryAlias');
-        $postAlias = $this->property('postAlias');
+        if ($post = $this->findPost()) {
+            $category = $post->categories->sortByDesc('nest_depth')->first();
 
-        $this->divider = $this->property('divider');
-        $this->compatibility = (bool)$this->property('compatibility');
-
-        if (isset($this->page->components[$categoryAlias])) {
-            if (!$category = $this->page->components[$categoryAlias]->category) {
-                return $this->blogBreadcrumbs = $this->page['breadcrumbs'] = [[
-                    'title'    => $this->page->title,
-                    'url'      => $this->page->url,
-                    'isActive' => true,
-                ]];
-            }
-
-            $categoryPath = $this->getCategoryPath($category);
-
-            return $this->blogBreadcrumbs = $this->page['breadcrumbs'] = $this->buildBreadcrumbs($categoryPath);
+            return array_merge(
+                $category ? $this->categoryPath($category, false) : [],
+                [['title' => (string) $post->title, 'url' => $this->currentPageUrl(), 'isActive' => true]]
+            );
         }
 
-        if (isset($this->page->components[$postAlias])) {
-            $post = $this->page->components[$postAlias]->post;
+        $postsComponent = $this->page->components[$this->property('postsAlias')] ?? null;
 
-            if ($category = $post->categories->sortByDesc('nest_depth')->first()) {
-                $categoryPath = $this->getCategoryPath($category, $post);
-            }
-
-            return $this->blogBreadcrumbs = $this->page['breadcrumbs'] = $this->buildBreadcrumbs($categoryPath, $post);
+        if (!$postsComponent) {
+            return [];
         }
+
+        if ($category = $postsComponent->category ?? null) {
+            return $this->categoryPath($category, true);
+        }
+
+        return [['title' => (string) $this->page->title, 'url' => $this->currentPageUrl(), 'isActive' => true]];
     }
 
-    protected function getCategoryPath(Category $category, Post $post = null): array
+    /**
+     * The category and its parents, the top level first.
+     *
+     * @return array<int, array{title: string, url: string|null, isActive: bool}>
+     */
+    protected function categoryPath(Category $category, bool $lastIsActive): array
     {
-        $categoryPath[] = $category;
+        $categoryPage = (string) $this->property('categoryPage');
+        $path = $category->getParentsAndSelf();
+        $last = $path->count() - 1;
+        $crumbs = [];
 
-        $this->getLastParent($category->parent_id, $categoryPath);
-
-        return array_reverse($categoryPath);
-    }
-
-    protected function getLastParent($parentId, &$categoryPath = []): ?array
-    {
-        if (!$parentId) {
-            return null;
-        }
-
-        if ($category = $this->categories->where('id', intval($parentId))->first()) {
-            $categoryPath[] = $category;
-
-            if (intval($category->parent_id)) {
-                $this->getLastParent($category->parent_id, $categoryPath);
-            }
-
-            return $categoryPath;
-        }
-
-        return null;
-    }
-
-    protected function buildBreadcrumbs($categoryPath, Post $post = null): array
-    {
-        $breadcrumbs = [];
-
-        if (!empty($categoryPath)) {
-            foreach ($categoryPath as $key => $category) {
-                $link = $this->controller->pageUrl($this->property('categoryPage'), [
-                    'id'   => $category->id,
-                    'slug' => $category->slug,
-                ]);
-
-                $breadcrumbs[] = [
-                    'title'    => $category->name,
-                    'url'      => $link,
-                    'isActive' => !$post && count($categoryPath) == $key + 1,
-                ];
-            }
-        }
-
-        if ($post) {
-            $breadcrumbs[] = [
-                'title'    => $post->title,
-                'url'      => $post->slug,
-                'isActive' => true,
+        foreach ($path->values() as $index => $item) {
+            $crumbs[] = [
+                'title'    => (string) $item->name,
+                'url'      => $categoryPage !== '' ? $item->setUrl($categoryPage, $this->controller) : null,
+                'isActive' => $lastIsActive && $index === $last,
             ];
         }
 
-        return $breadcrumbs;
-    }
-
-    public function getCategoryPageOptions()
-    {
-        return Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
+        return $crumbs;
     }
 }

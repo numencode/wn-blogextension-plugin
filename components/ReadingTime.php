@@ -1,53 +1,65 @@
-<?php namespace NumenCode\BlogExtension\Components;
+<?php
 
-use Cms\Classes\ComponentBase;
+declare(strict_types=1);
 
-class ReadingTime extends ComponentBase
+namespace NumenCode\BlogExtension\Components;
+
+use NumenCode\BlogExtension\Classes\BlogComponent;
+
+/**
+ * The estimated reading time of the page's blog post, in minutes.
+ */
+class ReadingTime extends BlogComponent
 {
-    const DEFAULT_READING_SPEED = 200;
+    public const DEFAULT_WORDS_PER_MINUTE = 200;
 
-    public $minutes;
+    public ?int $minutes = null;
+
+    public ?int $words = null;
 
     public function componentDetails(): array
     {
         return [
-            'name'        => 'numencode.blogextension::lang.reading_time.name',
-            'description' => 'numencode.blogextension::lang.reading_time.description',
+            'name'        => self::LANG . 'reading_time.name',
+            'description' => self::LANG . 'reading_time.description',
         ];
     }
 
     public function defineProperties(): array
     {
         return [
-            'postAlias'    => [
-                'title'             => 'numencode.blogextension::lang.aliases.post_title',
-                'description'       => 'numencode.blogextension::lang.aliases.post_description',
+            'postAlias'      => $this->postAliasProperty(),
+            'wordsPerMinute' => [
+                'title'             => self::LANG . 'properties.words_per_minute',
+                'description'       => self::LANG . 'properties.words_per_minute_description',
                 'type'              => 'string',
-                'default'           => 'blogPost',
-                'showExternalParam' => false,
-            ],
-            'readingSpeed' => [
-                'title'             => 'numencode.blogextension::lang.reading_time.speed_title',
-                'description'       => 'numencode.blogextension::lang.reading_time.speed_comment',
-                'default'           => static::DEFAULT_READING_SPEED,
-                'type'              => 'string',
-                'validationPattern' => '^(0+)?[1-9]\d*$',
+                'default'           => (string) static::DEFAULT_WORDS_PER_MINUTE,
+                'validationPattern' => '^[1-9][0-9]*$',
+                'validationMessage' => self::LANG . 'properties.number_validation',
                 'showExternalParam' => false,
             ],
         ];
     }
 
-    public function onRun()
+    protected function prepare(): void
     {
-        $postAlias = $this->property('postAlias');
-        $readingSpeed = $this->property('readingSpeed') ?: static::DEFAULT_READING_SPEED;
-
-        if (!isset($this->page->components[$postAlias])) {
+        if (!$post = $this->findPost()) {
             return;
         }
 
-        $post = $this->page->components[$postAlias]->post;
+        $wordsPerMinute = (int) $this->property('wordsPerMinute') ?: static::DEFAULT_WORDS_PER_MINUTE;
 
-        $this->minutes = ceil(str_word_count(strip_tags($post->content)) / $readingSpeed);
+        $this->words = static::countWords((string) ($post->content_html ?: $post->content));
+        $this->minutes = max(1, (int) ceil($this->words / $wordsPerMinute));
+    }
+
+    /**
+     * Counts the words of an HTML text; letters of any script count (č, š, ž, ä, …).
+     */
+    public static function countWords(string $html): int
+    {
+        $text = html_entity_decode(strip_tags($html), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+        return (int) preg_match_all("/[\p{L}\p{N}]+(?:['’\-][\p{L}\p{N}]+)*/u", $text);
     }
 }

@@ -1,9 +1,9 @@
 {
     "name": "numencode/wn-blogextension-plugin",
-    "description": "NumenCode Blog Extension plugin for Winter CMS",
+    "description": "Extends Winter.Blog with tags, picture galleries, file attachments, breadcrumbs, reading time, related posts and a configurable RSS feed.",
     "type": "winter-plugin",
     "homepage": "https://www.numencode.com",
-    "keywords": ["winter cms", "winter", "plugin", "blog", "laravel", "numencode"],
+    "keywords": ["winter cms", "winter", "plugin", "laravel", "numencode", "blog", "tags", "gallery", "rss", "translate"],
     "license": "MIT",
     "support": {
         "issues": "https://github.com/numencode/wn-blogextension-plugin/issues",
@@ -14,16 +14,34 @@
             "name": "Blaz Orazem",
             "email": "blaz@orazem.si",
             "homepage": "https://orazem.si/",
-            "role": "Founder"
+            "role": "Maintainer"
         }
     ],
     "require": {
         "php": "^8.2",
-        "fakerphp/faker": "^1.24",
-        "winter/wn-blog-plugin": "^2.1",
-        "numencode/wn-fundamentals-plugin": "^2.1"
+        "composer/installers": "^1.0 || ^2.0",
+        "numencode/wn-fundamentals-plugin": "^2.1",
+        "winter/wn-blog-plugin": "^2.2"
+    },
+    "suggest": {
+        "fakerphp/faker": "Enables the Faker page (generates demo categories, posts and pictures while app.debug is on).",
+        "winter/wn-translate-plugin": "Enables translations of tags, pictures and files.",
+        "winter/wn-pages-plugin": "Enables blog tags as menu items (and in Winter.Sitemap)."
+    },
+    "autoload": {
+        "psr-4": {
+            "NumenCode\\BlogExtension\\": ""
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true
+        },
+        "sort-packages": true
     },
     "extra": {
         "installer-name": "blogextension"
-    }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
 }

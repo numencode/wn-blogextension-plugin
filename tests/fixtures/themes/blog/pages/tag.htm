@@ -1,0 +1,17 @@
+title = "Tag"
+url = "/blog/tag/:slug/:page?"
+
+[blogTagFilter]
+slug = "{{ :slug }}"
+pageNumber = "{{ :page }}"
+postsPerPage = 2
+postPage = "post"
+categoryPage = "category"
+tagPage = "tag"
+
+[blogTagList]
+tagPage = "tag"
+sortOrder = "posts_count desc"
+==
+LIST[{% component 'blogTagList' %}]
+FILTER[{% component 'blogTagFilter' %}]

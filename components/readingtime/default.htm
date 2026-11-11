@@ -1,1 +1,5 @@
-{{ "Reading time: :count min"|_ ({ count: __SELF__.minutes }) }}
+{% if __SELF__.minutes %}
+    <span class="blog-reading-time">
+        {{ 'numencode.blogextension::lang.frontend.reading_time'|trans({ minutes: __SELF__.minutes }) }}
+    </span>
+{% endif %}
