@@ -18,10 +18,10 @@
         }
     ],
     "require": {
-        "php": "^8.0.2",
+        "php": "^8.2",
         "fakerphp/faker": "^1.24",
         "winter/wn-blog-plugin": "^2.1",
-        "numencode/wn-fundamentals-plugin": "^1.0"
+        "numencode/wn-fundamentals-plugin": "^2.1"
     },
     "extra": {
         "installer-name": "blogextension"
