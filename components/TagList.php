@@ -1,107 +1,94 @@
-<?php namespace NumenCode\BlogExtension\Components;
+<?php
 
-use Cms\Classes\Page;
-use Cms\Classes\ComponentBase;
+declare(strict_types=1);
+
+namespace NumenCode\BlogExtension\Components;
+
+use Illuminate\Database\Eloquent\Collection;
+use NumenCode\BlogExtension\Classes\BlogComponent;
 use NumenCode\BlogExtension\Models\Tag;
 
-class TagList extends ComponentBase
+/**
+ * A list of tags with the number of their published posts.
+ */
+class TagList extends BlogComponent
 {
-    public $tags;
+    public const SORT_OPTIONS = [
+        'name asc'         => 'sorting.name_asc',
+        'name desc'        => 'sorting.name_desc',
+        'posts_count desc' => 'sorting.posts_count_desc',
+        'created_at asc'   => 'sorting.created_asc',
+        'created_at desc'  => 'sorting.created_desc',
+    ];
+
+    public ?Collection $tags = null;
 
     public function componentDetails(): array
     {
         return [
-            'name'        => 'numencode.blogextension::lang.tag_list.name',
-            'description' => 'numencode.blogextension::lang.tag_list.description',
+            'name'        => self::LANG . 'tag_list.name',
+            'description' => self::LANG . 'tag_list.description',
         ];
     }
 
     public function defineProperties(): array
     {
         return [
-            'results'       => [
-                'title'             => 'numencode.blogextension::lang.tag_list.results_title',
-                'description'       => 'numencode.blogextension::lang.tag_list.results_description',
-                'default'           => 0,
-                'validationPattern' => '^[0-9]+$',
-                'validationMessage' => 'numencode.blogextension::lang.tag_list.results_validation',
-            ],
+            'limit'         => $this->limitProperty(0, 'tag_limit_description'),
             'sortOrder'     => [
-                'title'       => 'numencode.blogextension::lang.tag_list.sort_order_title',
-                'description' => 'numencode.blogextension::lang.tag_list.sort_order_description',
-                'type'        => 'dropdown',
-                'default'     => 'created_at desc',
+                'title'             => self::LANG . 'properties.sort_order',
+                'description'       => self::LANG . 'properties.tag_sort_order_description',
+                'type'              => 'dropdown',
+                'default'           => 'name asc',
+                'showExternalParam' => false,
             ],
-            'postsCount'    => [
-                'title'       => 'numencode.blogextension::lang.tag_list.posts_count_title',
-                'description' => 'numencode.blogextension::lang.tag_list.posts_count_description',
-                'type'        => 'checkbox',
-                'default'     => true,
+            'showPostCount' => [
+                'title'             => self::LANG . 'properties.show_post_count',
+                'description'       => self::LANG . 'properties.show_post_count_description',
+                'type'              => 'checkbox',
+                'default'           => true,
+                'showExternalParam' => false,
             ],
-            'emptyTags'     => [
-                'title'       => 'numencode.blogextension::lang.tag_list.empty_tags_title',
-                'description' => 'numencode.blogextension::lang.tag_list.empty_tags_description',
-                'type'        => 'checkbox',
-                'default'     => false,
+            'showEmptyTags' => [
+                'title'             => self::LANG . 'properties.show_empty_tags',
+                'description'       => self::LANG . 'properties.show_empty_tags_description',
+                'type'              => 'checkbox',
+                'default'           => false,
+                'showExternalParam' => false,
             ],
-            'tagFilterPage' => [
-                'title'       => 'numencode.blogextension::lang.pages.tag_filter_title',
-                'description' => 'numencode.blogextension::lang.pages.tag_filter_description',
-                'type'        => 'dropdown',
-                'placeholder' => 'blog/tag',
-                'group'       => 'numencode.blogextension::lang.groups.links',
-            ],
+            'tagPage'       => $this->pageProperty('tag', 'blog/tag'),
         ];
     }
 
     public function onRun()
     {
-        $this->tags = $this->loadTags();
+        $this->tags = $this->page['tags'] = $this->loadTags();
     }
 
-    protected function loadTags()
+    protected function loadTags(): Collection
     {
-        $query = Tag::with('posts');
+        $query = Tag::withCount(['posts' => fn ($posts) => $posts->isPublished()]);
 
-        if (!$this->property('emptyTags')) {
-            $query->has('posts', '>', 0);
+        if (!$this->property('showEmptyTags')) {
+            $query->whereHas('posts', fn ($posts) => $posts->isPublished());
         }
 
-        if ($take = intVal($this->property('results'))) {
-            $query->take($take);
-        }
+        $sortOrder = (string) $this->property('sortOrder');
+        [$column, $direction] = explode(' ', array_key_exists($sortOrder, self::SORT_OPTIONS) ? $sortOrder : 'name asc');
+        $query->orderBy($column, $direction)->orderBy('name');
 
-        $query->listTags($this->property('sortOrder'));
+        if ($limit = (int) $this->property('limit')) {
+            $query->limit($limit);
+        }
 
         $tags = $query->get();
-
-        $tags->each(function ($tag) {
-            if ($this->property('postsCount')) {
-                $tag->posts_count = $tag->posts->count();
-            }
-
-            if ($tagFilterPage = $this->property('tagFilterPage')) {
-                $tag->setUrl($tagFilterPage, $this->controller);
-            }
-        });
+        $this->setTagUrls($tags);
 
         return $tags;
     }
 
     public function getSortOrderOptions(): array
     {
-        return [
-            'name asc'        => 'numencode.blogextension::lang.sorting.name_asc',
-            'name desc'       => 'numencode.blogextension::lang.sorting.name_desc',
-            'created_at asc'  => 'numencode.blogextension::lang.sorting.created_asc',
-            'created_at desc' => 'numencode.blogextension::lang.sorting.created_desc',
-            'updated_at asc'  => 'numencode.blogextension::lang.sorting.updated_asc',
-            'updated_at desc' => 'numencode.blogextension::lang.sorting.updated_desc',
-        ];
-    }
-
-    public function getTagFilterPageOptions(): array
-    {
-        return array_merge([false => '---'], Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName'));
+        return array_map(fn (string $key): string => trans(self::LANG . $key), self::SORT_OPTIONS);
     }
 }

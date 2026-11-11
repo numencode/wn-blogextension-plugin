@@ -1,17 +1,20 @@
-<?php namespace NumenCode\BlogExtension;
+<?php
 
-use System\Classes\PluginBase;
-use NumenCode\BlogExtension\Components\RssFeed;
-use NumenCode\BlogExtension\Components\TagList;
-use NumenCode\BlogExtension\Components\TagPost;
-use NumenCode\BlogExtension\Components\TagFilter;
-use NumenCode\BlogExtension\Components\TagRelated;
+declare(strict_types=1);
+
+namespace NumenCode\BlogExtension;
+
+use Backend\Models\UserRole;
+use NumenCode\BlogExtension\Classes\BlogExtender;
 use NumenCode\BlogExtension\Components\Breadcrumbs;
 use NumenCode\BlogExtension\Components\ReadingTime;
-use NumenCode\BlogExtension\Classes\ExtendBlogPostModel;
-use NumenCode\BlogExtension\Classes\ExtendBlogNavigation;
-use NumenCode\BlogExtension\Classes\ExtendBlogPostFields;
-use NumenCode\BlogExtension\Classes\ExtendBlogCategoryColumns;
+use NumenCode\BlogExtension\Components\RssFeed;
+use NumenCode\BlogExtension\Components\TagFilter;
+use NumenCode\BlogExtension\Components\TagList;
+use NumenCode\BlogExtension\Components\TagPost;
+use NumenCode\BlogExtension\Components\TagRelated;
+use NumenCode\BlogExtension\Models\Settings;
+use System\Classes\PluginBase;
 
 class Plugin extends PluginBase
 {
@@ -27,61 +30,13 @@ class Plugin extends PluginBase
             'description' => 'numencode.blogextension::lang.plugin.description',
             'author'      => 'Blaz Orazem',
             'icon'        => 'icon-pencil-square-o',
-            'homepage'    => 'https://github.com/numencode/wn-blogextension-plugin',
+            'homepage'    => 'https://www.numencode.com',
         ];
     }
 
-    public function boot()
+    public function boot(): void
     {
-        (new ExtendBlogNavigation())->init();
-        (new ExtendBlogPostModel())->init();
-        (new ExtendBlogPostFields())->init();
-        (new ExtendBlogCategoryColumns())->init();
-    }
-
-    public function register()
-    {
-        //
-    }
-
-    public function registerPermissions(): array
-    {
-        return [
-            'numencode.blogextension.manage_settings' => [
-                'tab'   => 'numencode.blogextension::lang.tabs.blog',
-                'label' => 'numencode.blogextension::lang.settings.manage.blog',
-            ],
-            'numencode.blogextension.access_tags'     => [
-                'tab'   => 'numencode.blogextension::lang.tabs.blog',
-                'label' => 'numencode.blogextension::lang.settings.manage.tags',
-            ],
-            'numencode.blogextension.access_pictures' => [
-                'tab'   => 'numencode.blogextension::lang.tabs.blog',
-                'label' => 'numencode.blogextension::lang.settings.manage.pictures',
-            ],
-            'numencode.blogextension.access_files'    => [
-                'tab'   => 'numencode.blogextension::lang.tabs.blog',
-                'label' => 'numencode.blogextension::lang.settings.manage.files',
-            ],
-            'numencode.blogextension.access_faker'    => [
-                'tab'   => 'numencode.blogextension::lang.tabs.blog',
-                'label' => 'numencode.blogextension::lang.settings.manage.faker',
-            ],
-        ];
-    }
-
-    public function registerSettings(): array
-    {
-        return [
-            'settings' => [
-                'label'       => 'numencode.blogextension::lang.plugin.name',
-                'description' => 'numencode.blogextension::lang.settings.manage.blog',
-                'icon'        => 'icon-pencil-square-o',
-                'class'       => 'NumenCode\BlogExtension\Models\Settings',
-                'category'    => 'winter.blog::lang.blog.menu_label',
-                'permissions' => ['numencode.blogextension.manage_settings'],
-            ],
-        ];
+        (new BlogExtender())->init();
     }
 
     public function registerComponents(): array
@@ -94,6 +49,55 @@ class Plugin extends PluginBase
             TagPost::class     => 'blogTagPost',
             TagFilter::class   => 'blogTagFilter',
             TagRelated::class  => 'blogTagRelated',
+        ];
+    }
+
+    public function registerPermissions(): array
+    {
+        $tab = 'winter.blog::lang.blog.tab';
+        $editors = [UserRole::CODE_DEVELOPER, UserRole::CODE_PUBLISHER];
+
+        return [
+            'numencode.blogextension.manage_settings' => [
+                'tab'   => $tab,
+                'label' => 'numencode.blogextension::lang.permissions.manage_settings',
+                'roles' => $editors,
+            ],
+            'numencode.blogextension.access_tags'     => [
+                'tab'   => $tab,
+                'label' => 'numencode.blogextension::lang.permissions.access_tags',
+                'roles' => $editors,
+            ],
+            'numencode.blogextension.access_pictures' => [
+                'tab'   => $tab,
+                'label' => 'numencode.blogextension::lang.permissions.access_pictures',
+                'roles' => $editors,
+            ],
+            'numencode.blogextension.access_files'    => [
+                'tab'   => $tab,
+                'label' => 'numencode.blogextension::lang.permissions.access_files',
+                'roles' => $editors,
+            ],
+            'numencode.blogextension.access_faker'    => [
+                'tab'   => $tab,
+                'label' => 'numencode.blogextension::lang.permissions.access_faker',
+                'roles' => [UserRole::CODE_DEVELOPER],
+            ],
+        ];
+    }
+
+    public function registerSettings(): array
+    {
+        return [
+            'settings' => [
+                'label'       => 'numencode.blogextension::lang.plugin.name',
+                'description' => 'numencode.blogextension::lang.settings.description',
+                'icon'        => 'icon-pencil-square-o',
+                'class'       => Settings::class,
+                'category'    => 'winter.blog::lang.blog.menu_label',
+                'permissions' => ['numencode.blogextension.manage_settings'],
+                'order'       => 510,
+            ],
         ];
     }
 }

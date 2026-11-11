@@ -1,0 +1,66 @@
+---
+name: Tests
+
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+
+permissions:
+    contents: read
+
+jobs:
+    phpUnitTests:
+        runs-on: ubuntu-latest
+        name: Unit Tests / PHP ${{ matrix.php }} / Winter ${{ matrix.winter }}
+        continue-on-error: ${{ matrix.experimental }}
+        strategy:
+            fail-fast: false
+            matrix:
+                php: ['8.2', '8.3', '8.4', '8.5']
+                winter: ['~1.2.0']
+                experimental: [false]
+                include:
+                    # Upcoming Winter release – informational only
+                    - php: '8.4'
+                      winter: 'dev-develop'
+                      experimental: true
+        steps:
+            - name: Checkout plugin
+              uses: actions/checkout@v4
+              with:
+                  path: plugin
+
+            - name: Install PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php }}
+                  extensions: mbstring, intl, gd, xml, sqlite, pdo_sqlite
+                  coverage: none
+
+            - name: Create Winter CMS project
+              run: composer create-project wintercms/winter winter "${{ matrix.winter }}" --no-install --no-scripts --no-interaction
+
+            - name: Add plugin to the project
+              working-directory: winter
+              run: |
+                  mkdir -p plugins/numencode config/testing
+                  mv ../plugin plugins/numencode/blogextension
+                  cp config/cms.php config/testing/cms.php
+                  # Only this plugin: NumenCode.Fundamentals and Winter.Blog are installed into plugins/ as regular
+                  # dependencies and must not be merged (their winter/storm constraints break Winter develop's alias)
+                  composer config --json extra.merge-plugin.include '["plugins/numencode/blogextension/composer.json"]'
+
+            # Winter.Translate is optional for the plugin; installed so the integration tests can run.
+            - name: Add Winter.Translate to the project
+              working-directory: winter
+              run: composer require winter/wn-translate-plugin --no-update --no-interaction
+
+            - name: Install Composer dependencies
+              working-directory: winter
+              run: composer update --no-interaction --no-progress --prefer-dist
+
+            - name: Run unit tests
+              working-directory: winter
+              run: php artisan winter:test -p NumenCode.BlogExtension --configuration=plugins/numencode/blogextension/phpunit.xml

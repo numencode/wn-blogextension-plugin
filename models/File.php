@@ -1,27 +1,23 @@
-<?php namespace NumenCode\BlogExtension\Models;
+<?php
 
-use Model;
-use Winter\Storm\Database\Traits\Sortable;
-use Winter\Storm\Database\Traits\Validation;
+declare(strict_types=1);
 
-class File extends Model
+namespace NumenCode\BlogExtension\Models;
+
+/**
+ * A file attached to a blog post (a media library path in "file").
+ */
+class File extends PostAttachment
 {
-    use Sortable, Validation;
-
     public $table = 'numencode_blogextension_files';
 
-    public $implement = ['@Winter.Translate.Behaviors.TranslatableModel'];
-
-    public $rules = [];
+    public $rules = [
+        'file' => 'required',
+    ];
 
     protected $fillable = [
         'title',
         'file',
         'is_published',
-        'sort_order',
-    ];
-
-    public $translatable = [
-        'title',
     ];
 }

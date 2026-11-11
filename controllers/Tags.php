@@ -1,23 +1,27 @@
-<?php namespace NumenCode\BlogExtension\Controllers;
+<?php
 
-use BackendMenu;
+declare(strict_types=1);
+
+namespace NumenCode\BlogExtension\Controllers;
+
 use Backend\Classes\Controller;
+use BackendMenu;
 
+/**
+ * Blog post tags (Blog → Tags).
+ */
 class Tags extends Controller
 {
     public $implement = [
-        'Backend.Behaviors.FormController',
-        'Backend.Behaviors.ListController',
+        \Backend\Behaviors\FormController::class,
+        \Backend\Behaviors\ListController::class,
     ];
 
     public $formConfig = 'config_form.yaml';
+
     public $listConfig = 'config_list.yaml';
 
-    public $bodyClass = 'compact-container';
-
-    public $requiredPermissions = [
-        'numencode.blogextension.access_tags',
-    ];
+    protected $requiredPermissions = ['numencode.blogextension.access_tags'];
 
     public function __construct()
     {

@@ -4,12 +4,23 @@
 
 columns:
     name:
-        label: Name
+        label: 'numencode.fundamentals::lang.field.title'
+        type: text
         searchable: true
+        sortable: true
     slug:
-        label: Slug
+        label: 'numencode.fundamentals::lang.field.slug'
+        type: text
         searchable: true
-    posts_count:
-        label: Count
+        sortable: true
+    posts:
+        label: 'numencode.blogextension::lang.tags.posts'
+        type: number
         relation: posts
         useRelationCount: true
+        sortable: true
+    created_at:
+        label: 'numencode.fundamentals::lang.timestamp.created_at'
+        type: datetime
+        sortable: true
+        invisible: true

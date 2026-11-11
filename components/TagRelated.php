@@ -1,134 +1,72 @@
-<?php namespace NumenCode\BlogExtension\Components;
+<?php
 
-use DB;
-use Cms\Classes\Page;
+declare(strict_types=1);
+
+namespace NumenCode\BlogExtension\Components;
+
+use Illuminate\Database\Eloquent\Collection;
+use NumenCode\BlogExtension\Classes\BlogComponent;
 use Winter\Blog\Models\Post;
-use Cms\Classes\ComponentBase;
 
-class TagRelated extends ComponentBase
+/**
+ * Published posts that share tags with the page's blog post, the most shared tags first.
+ */
+class TagRelated extends BlogComponent
 {
-    public $slug;
-    public $posts;
-    public $postPage;
-    public $categoryPage;
+    public ?Collection $posts = null;
+
+    public ?string $noPostsMessage = null;
 
     public function componentDetails(): array
     {
         return [
-            'name'        => 'numencode.blogextension::lang.tag_related.name',
-            'description' => 'numencode.blogextension::lang.tag_related.description',
+            'name'        => self::LANG . 'tag_related.name',
+            'description' => self::LANG . 'tag_related.description',
         ];
     }
 
     public function defineProperties(): array
     {
         return [
-            'slug'          => [
-                'title'       => 'winter.blog::lang.settings.post_slug',
-                'description' => 'winter.blog::lang.settings.post_slug_description',
-                'default'     => '{{ :slug }}',
-                'type'        => 'string',
-            ],
-            'results'       => [
-                'title'             => 'numencode.blogextension::lang.tag_related.results_title',
-                'description'       => 'numencode.blogextension::lang.tag_related.results_description',
-                'default'           => 5,
-                'validationPattern' => '^[1-9]+$',
-                'validationMessage' => 'numencode.blogextension::lang.tag_related.results_validation',
-            ],
-            'postPage'      => [
-                'title'       => 'numencode.blogextension::lang.pages.post_title',
-                'description' => 'numencode.blogextension::lang.pages.post_description',
-                'type'        => 'dropdown',
-                'default'     => 'blog/post',
-                'group'       => 'numencode.blogextension::lang.groups.links',
-            ],
-            'categoryPage'  => [
-                'title'       => 'numencode.blogextension::lang.pages.category_title',
-                'description' => 'numencode.blogextension::lang.pages.category_description',
-                'type'        => 'dropdown',
-                'default'     => 'blog/category',
-                'group'       => 'numencode.blogextension::lang.groups.links',
-            ],
-            'tagFilterPage' => [
-                'title'       => 'numencode.blogextension::lang.pages.tag_filter_title',
-                'description' => 'numencode.blogextension::lang.pages.tag_filter_description',
-                'type'        => 'dropdown',
-                'placeholder' => 'blog/tag',
-                'group'       => 'numencode.blogextension::lang.groups.links',
-            ],
+            'postAlias'      => $this->postAliasProperty(),
+            'limit'          => $this->limitProperty(5, 'related_limit_description'),
+            'noPostsMessage' => $this->noPostsMessageProperty(),
+            'postPage'       => $this->pageProperty('post', 'blog/post'),
+            'categoryPage'   => $this->pageProperty('category', 'blog/category'),
+            'tagPage'        => $this->pageProperty('tag', 'blog/tag'),
         ];
     }
 
-    public function onRun()
+    protected function prepare(): void
     {
-        $this->prepareVars();
+        $this->noPostsMessage = $this->property('noPostsMessage');
+        $this->posts = new Collection();
 
-        $this->posts = $this->loadRelatedPosts();
-    }
-
-    protected function prepareVars()
-    {
-        $this->slug = $this->page['slug'] = $this->property('slug');
-        $this->postPage = $this->page['postPage'] = $this->property('postPage');
-        $this->categoryPage = $this->page['categoryPage'] = $this->property('categoryPage');
-    }
-
-    protected function loadRelatedPosts()
-    {
-        $post = Post::with('tags')->whereSlug($this->slug)->first();
-
-        if (is_null($post) || !$post->tags->count()) {
+        if (!$post = $this->findPost()) {
             return;
         }
 
-        $tagIds = $post->tags->lists('id');
+        $tagIds = static::tagIds($post->tags);
 
-        $query = Post::isPublished()
-            ->where('id', '<>', $post->id)
-            ->whereHas('tags', function ($tag) use ($tagIds) {
-                $tag->whereIn('id', $tagIds);
-            })
-            ->with('tags');
-
-        $orderBy = DB::raw('(
-            SELECT COUNT(*) FROM `numencode_blogextension_posts_tags`
-            WHERE `numencode_blogextension_posts_tags`.`post_id` = `winter_blog_posts`.`id`
-            AND `numencode_blogextension_posts_tags`.`tag_id` IN (' . implode(', ', $tagIds) . '))');
-
-        $query->orderby($orderBy, 'desc');
-
-        if ($results = intVal($this->property('results'))) {
-            $query->take($results);
+        if (!$tagIds) {
+            return;
         }
 
-        return $query->get()->each(function ($post) {
-            $post->setUrl($this->postPage, $this->controller);
+        $inTags = fn ($tags) => $tags->whereIn('numencode_blogextension_tags.id', $tagIds);
 
-            $post->categories->each(function ($category) {
-                $category->setUrl($this->categoryPage, $this->controller);
-            });
+        $query = Post::isPublished()
+            ->with($this->postRelations())
+            ->where('id', '<>', $post->id)
+            ->whereHas('tags', $inTags)
+            ->withCount(['tags as shared_tags_count' => $inTags])
+            ->orderByDesc('shared_tags_count')
+            ->orderByDesc('published_at');
 
-            if ($tagFilterPage = $this->property('tagFilterPage')) {
-                $post->tags->each(function ($tag) use ($tagFilterPage) {
-                    $tag->setUrl($tagFilterPage, $this->controller);
-                });
-            }
-        });
-    }
+        if ($limit = (int) $this->property('limit')) {
+            $query->limit($limit);
+        }
 
-    public function getPostPageOptions(): array
-    {
-        return Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
-    }
-
-    public function getCategoryPageOptions(): array
-    {
-        return Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
-    }
-
-    public function getTagFilterPageOptions(): array
-    {
-        return array_merge([false => '---'], Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName'));
+        $this->posts = $query->get();
+        $this->setPostUrls($this->posts);
     }
 }

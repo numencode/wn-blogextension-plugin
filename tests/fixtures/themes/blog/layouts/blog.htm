@@ -1,0 +1,11 @@
+description = "Layout with post-dependent components"
+
+[blogReadingTime]
+wordsPerMinute = 2
+
+[blogTagPost]
+tagPage = "tag"
+==
+READING[{% component 'blogReadingTime' %}]
+TAGS[{% component 'blogTagPost' %}]
+{% page %}

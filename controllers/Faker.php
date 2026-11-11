@@ -1,134 +1,59 @@
-<?php namespace NumenCode\BlogExtension\Controllers;
+<?php
 
-use Storage;
-use Carbon\Carbon;
-use Faker\Factory;
-use Winter\Blog\Models\Post;
+declare(strict_types=1);
+
+namespace NumenCode\BlogExtension\Controllers;
+
 use Backend\Classes\Controller;
-use Backend\Facades\BackendAuth;
-use Winter\Blog\Models\Category;
-use NumenCode\BlogExtension\Models\Picture;
-use NumenCode\BlogExtension\Models\Settings;
+use BackendAuth;
+use BackendMenu;
+use Flash;
+use Lang;
+use NumenCode\BlogExtension\Classes\FakerGenerator;
 
+/**
+ * Development tool (Blog → Faker): generates demo categories, tags, posts and pictures.
+ *
+ * Only reachable while app.debug is on and fakerphp/faker is installed; otherwise every request gets a 404.
+ */
 class Faker extends Controller
 {
-    public $implement = [];
-
-    protected $faker;
-    protected $categories;
-    protected $posts;
-    protected $content;
-    protected $paragraphs;
-    protected $media;
-    protected $pictures;
-    protected $files;
+    protected $requiredPermissions = ['numencode.blogextension.access_faker'];
 
     public function __construct()
     {
         parent::__construct();
-    }
 
-    public function index()
-    {
-        $this->prepareVars();
-        $this->generateCategories();
-        $this->generatePosts();
-    }
+        BackendMenu::setContext('Winter.Blog', 'blog', 'faker');
 
-    protected function prepareVars()
-    {
-        $this->faker = Factory::create();
-        $this->categories = Settings::get('faker_categories') ?: 0;
-        $this->posts = Settings::get('faker_posts') ?: 0;
-        $this->content = Settings::get('faker_content') ?: 1000;
-        $this->paragraphs = (bool)Settings::get('faker_paragraphs');
-        $this->media = Settings::get('faker_media') ?: 'media/';
-        $this->pictures = (bool)Settings::get('faker_pictures');
-        $this->files = $this->prepareFiles();
-    }
-
-    protected function generateCategories()
-    {
-        if (!$this->categories) {
-            return;
-        }
-
-        for ($i = 0; $i < $this->categories; $i++) {
-            $name = $this->faker->streetName;
-
-            Category::create([
-                'name'        => $name,
-                'slug'        => str_slug($name),
-                'description' => $this->faker->realText(100),
-            ]);
-        }
-    }
-
-    protected function generatePosts()
-    {
-        if (!$this->posts) {
-            return;
-        }
-
-        $blogCategories = Category::pluck('id')->toArray();
-
-        for ($i = 0; $i < $this->posts; $i++) {
-            $title = rtrim($this->faker->realText(40), '.');
-            $content = $this->faker->realText($this->content);
-
-            $post = Post::create([
-                'user_id'      => BackendAuth::getUser()->id,
-                'title'        => $title,
-                'slug'         => str_slug($title),
-                'excerpt'      => $this->faker->realText(100),
-                'content'      => $this->paragraphs ? $this->prepareHtml($content) : $content,
-                'published_at' => Carbon::now(),
-                'published'    => true,
-            ]);
-
-            $post->categories()->attach($blogCategories[array_rand($blogCategories)]);
-
-            if (!$this->pictures || empty($this->files)) {
-                continue;
+        // Before pages and AJAX handlers (after the login and permission checks)
+        $this->bindEvent('page.beforeDisplay', function (): void {
+            if (!FakerGenerator::isAvailable()) {
+                abort(404);
             }
-
-            $post->pictures()->save(new Picture([
-                'title'        => $this->faker->company,
-                'picture'      => $this->files[array_rand($this->files)],
-                'is_published' => true,
-                'sort_order'   => 1,
-            ]));
-        }
-    }
-
-    protected function prepareHtml($content): string
-    {
-        $paragraphs = wordwrap($content, 500, "%%%");
-        $chunks = explode("%%%", $paragraphs);
-
-        foreach ($chunks as &$paragraph) {
-            $paragraph = ucfirst($paragraph) . '.';
-            $paragraph = str_replace(['* ', '..', ',.'], ['', '.', '.'], $paragraph);
-            $paragraph = '<p>' . $paragraph . '</p>';
-        }
-
-        return implode('', $chunks);
-    }
-
-    protected function prepareFiles(): array
-    {
-        if (!$this->pictures) {
-            return [];
-        }
-
-        $files = array_filter(Storage::allFiles(), function ($file) {
-            return starts_with($file, $this->media) &&
-                !str_contains($file, 'thumb') &&
-                (str_ends_with($file, '.jpg') || str_ends_with($file, '.png'));
         });
+    }
 
-        return array_map(function ($file) {
-            return ltrim($file, 'media');
-        }, $files);
+    public function index(): void
+    {
+        $this->pageTitle = 'numencode.blogextension::lang.faker.title';
+        $this->vars['defaults'] = FakerGenerator::normalizeOptions(['posts' => 10, 'pictures' => true]);
+        $this->vars['limits'] = [
+            'categories' => FakerGenerator::MAX_CATEGORIES,
+            'tags'       => FakerGenerator::MAX_TAGS,
+            'posts'      => FakerGenerator::MAX_POSTS,
+            'content'    => [FakerGenerator::MIN_CONTENT, FakerGenerator::MAX_CONTENT],
+        ];
+        $this->vars['mediaFolders'] = FakerGenerator::listMediaFolders();
+    }
+
+    /**
+     * AJAX handler of the "Generate" button.
+     */
+    public function onGenerate(): void
+    {
+        $result = (new FakerGenerator())->generate((array) post('Faker', []), BackendAuth::getUser());
+
+        Flash::success(Lang::get('numencode.blogextension::lang.faker.generated', $result));
     }
 }

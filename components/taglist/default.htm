@@ -1,12 +1,19 @@
 {% set tags = __SELF__.tags %}
 
-<div class="blog-tag-list">
-    {% for tag in tags %}
-        <a href="{{ tag.url ?: '#' }}" class="btn btn-info btn-sm mb-1 {{ tag.url ?: 'disabled' }}">
-            {{ tag.name }}
-            {% if tag.posts_count %}
-                <span class="badge badge-light">{{ tag.posts_count }}</span>
+{% if tags is not empty %}
+    <div class="blog-tag-list d-flex flex-wrap gap-1">
+        {% for tag in tags %}
+            {% set label %}
+                {{ tag.name }}
+                {% if __SELF__.property('showPostCount') %}
+                    <span class="badge text-bg-secondary">{{ tag.posts_count }}</span>
+                {% endif %}
+            {% endset %}
+            {% if tag.url %}
+                <a href="{{ tag.url }}" class="btn btn-outline-secondary btn-sm">{{ label }}</a>
+            {% else %}
+                <span class="btn btn-outline-secondary btn-sm disabled">{{ label }}</span>
             {% endif %}
-        </a>
-    {% endfor %}
-</div>
+        {% endfor %}
+    </div>
+{% endif %}

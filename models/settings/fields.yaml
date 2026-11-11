@@ -6,21 +6,21 @@ tabs:
     fields:
 
 #    Extensions tab
-        extension_pictures:
-            tab: numencode.blogextension::lang.tabs.extensions
-            label: numencode.blogextension::lang.settings.extensions.pictures_label
-            comment: numencode.blogextension::lang.settings.extensions.pictures_comment
-            type: switch
-            span: auto
-            default: false
-
         extension_tags:
             tab: numencode.blogextension::lang.tabs.extensions
             label: numencode.blogextension::lang.settings.extensions.tags_label
             comment: numencode.blogextension::lang.settings.extensions.tags_comment
             type: switch
             span: auto
-            default: false
+            default: true
+
+        extension_pictures:
+            tab: numencode.blogextension::lang.tabs.extensions
+            label: numencode.blogextension::lang.settings.extensions.pictures_label
+            comment: numencode.blogextension::lang.settings.extensions.pictures_comment
+            type: switch
+            span: auto
+            default: true
 
         extension_files:
             tab: numencode.blogextension::lang.tabs.extensions
@@ -28,21 +28,12 @@ tabs:
             comment: numencode.blogextension::lang.settings.extensions.files_comment
             type: switch
             span: auto
-            default: false
-
-#    Editors tab
-        editor_content_wysiwyg:
-            tab: numencode.blogextension::lang.tabs.editors
-            label: numencode.blogextension::lang.settings.editors.content_title
-            comment: numencode.blogextension::lang.settings.editors.content_description
-            type: switch
-            span: auto
-            default: false
+            default: true
 
         editor_excerpt_wysiwyg:
-            tab: numencode.blogextension::lang.tabs.editors
-            label: numencode.blogextension::lang.settings.editors.excerpt_title
-            comment: numencode.blogextension::lang.settings.editors.excerpt_description
+            tab: numencode.blogextension::lang.tabs.extensions
+            label: numencode.blogextension::lang.settings.extensions.excerpt_label
+            comment: numencode.blogextension::lang.settings.extensions.excerpt_comment
             type: switch
             span: auto
             default: false
@@ -106,101 +97,3 @@ tabs:
             comment: numencode.blogextension::lang.settings.rss_feed.content_comment
             type: checkbox
 
-#    Faker tab
-        section1:
-            tab: numencode.blogextension::lang.tabs.faker
-            label: numencode.blogextension::lang.settings.faker.section_data
-            type: section
-            permissions:
-                - numencode.blogextension.access_faker
-
-        faker_categories:
-            tab: numencode.blogextension::lang.tabs.faker
-            label: numencode.blogextension::lang.settings.faker.categories_label
-            comment: numencode.blogextension::lang.settings.faker.categories_comment
-            type: number
-            span: auto
-            placeholder: 5
-            permissions:
-                - numencode.blogextension.access_faker
-
-        faker_posts:
-            tab: numencode.blogextension::lang.tabs.faker
-            label: numencode.blogextension::lang.settings.faker.posts_label
-            comment: numencode.blogextension::lang.settings.faker.posts_comment
-            type: number
-            span: auto
-            placeholder: 20
-            permissions:
-                - numencode.blogextension.access_faker
-
-        section2:
-            tab: numencode.blogextension::lang.tabs.faker
-            label: numencode.blogextension::lang.settings.faker.section_content
-            type: section
-            permissions:
-                - numencode.blogextension.access_faker
-
-        faker_content:
-            tab: numencode.blogextension::lang.tabs.faker
-            label: numencode.blogextension::lang.settings.faker.content_label
-            comment: numencode.blogextension::lang.settings.faker.content_comment
-            type: number
-            span: auto
-            placeholder: 1000
-            permissions:
-                - numencode.blogextension.access_faker
-
-        faker_paragraphs:
-            tab: numencode.blogextension::lang.tabs.faker
-            label: numencode.blogextension::lang.settings.faker.paragraphs_label
-            comment: numencode.blogextension::lang.settings.faker.paragraphs_comment
-            type: checkbox
-            span: auto
-            permissions:
-                - numencode.blogextension.access_faker
-
-        section3:
-            tab: numencode.blogextension::lang.tabs.faker
-            label: numencode.blogextension::lang.settings.faker.section_media
-            type: section
-            permissions:
-                - numencode.blogextension.access_faker
-
-        faker_media:
-            tab: numencode.blogextension::lang.tabs.faker
-            label: numencode.blogextension::lang.settings.faker.media_label
-            comment: numencode.blogextension::lang.settings.faker.media_comment
-            type: dropdown
-            span: auto
-            permissions:
-                - numencode.blogextension.access_faker
-
-        faker_pictures:
-            tab: numencode.blogextension::lang.tabs.faker
-            label: numencode.blogextension::lang.settings.faker.pictures_label
-            comment: numencode.blogextension::lang.settings.faker.pictures_comment
-            type: checkbox
-            span: auto
-            permissions:
-                - numencode.blogextension.access_faker
-
-        section4:
-            tab: numencode.blogextension::lang.tabs.faker
-            type: section
-            permissions:
-                - numencode.blogextension.access_faker
-
-        faker_hint:
-            tab: numencode.blogextension::lang.tabs.faker
-            type: hint
-            path: $/numencode/blogextension/partials/hint.htm
-            permissions:
-                - numencode.blogextension.access_faker
-
-        faker_generate:
-            tab: numencode.blogextension::lang.tabs.faker
-            type: partial
-            path: $/numencode/blogextension/partials/generate.htm
-            permissions:
-                - numencode.blogextension.access_faker

@@ -1,0 +1,28 @@
+title = "Post"
+url = "/blog/post/:slug"
+
+[blogPost]
+slug = "{{ :slug }}"
+categoryPage = "category"
+
+[blogBreadcrumbs]
+categoryPage = "category"
+divider = "»"
+
+[blogReadingTime]
+wordsPerMinute = 2
+
+[blogTagPost]
+tagPage = "tag"
+
+[blogTagRelated]
+limit = 5
+postPage = "post"
+categoryPage = "category"
+tagPage = "tag"
+==
+BREADCRUMBS[{% component 'blogBreadcrumbs' %}]
+READING[{% component 'blogReadingTime' %}]
+TAGS[{% component 'blogTagPost' %}]
+RELATED[{% component 'blogTagRelated' %}]
+PAGEVAR[{% for crumb in breadcrumbs %}{{ crumb.title }};{% endfor %}]

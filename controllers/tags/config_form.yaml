@@ -2,15 +2,20 @@
 #  Form Behavior Config
 # ===================================
 
-name: 'numencode.blogextension::lang.tags.tag'
+name: 'numencode.blogextension::lang.tags.record'
 form: $/numencode/blogextension/models/tag/fields.yaml
 modelClass: NumenCode\BlogExtension\Models\Tag
 defaultRedirect: numencode/blogextension/tags
+
 create:
     title: 'numencode.blogextension::lang.tags.create'
-    redirect: numencode/blogextension/tags/update/:id
+    redirect: 'numencode/blogextension/tags/update/:id'
     redirectClose: numencode/blogextension/tags
+
 update:
     title: 'numencode.blogextension::lang.tags.update'
     redirect: numencode/blogextension/tags
     redirectClose: numencode/blogextension/tags
+
+preview:
+    title: 'numencode.blogextension::lang.tags.preview'

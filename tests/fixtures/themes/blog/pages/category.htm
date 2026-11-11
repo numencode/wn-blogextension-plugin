@@ -1,0 +1,12 @@
+title = "Category"
+url = "/blog/category/:slug"
+
+[blogPosts]
+categoryFilter = "{{ :slug }}"
+postPage = "post"
+categoryPage = "category"
+
+[blogBreadcrumbs]
+categoryPage = "category"
+==
+BREADCRUMBS[{% component 'blogBreadcrumbs' %}]

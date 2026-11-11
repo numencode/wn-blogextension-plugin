@@ -1,0 +1,82 @@
+<?php
+    $lang = 'numencode.blogextension::lang.faker.';
+    $number = function (string $key, int $min, int $max) use ($defaults, $lang) {
+        return sprintf(
+            '<div class="form-group span-left number-field">'
+            . '<label for="Faker-%1$s" class="form-label">%2$s</label>'
+            . '<input type="number" id="Faker-%1$s" name="Faker[%1$s]" value="%3$d" min="%4$d" max="%5$d" class="form-control">'
+            . '<p class="help-block">%6$s</p></div>',
+            e($key),
+            e(trans($lang . $key . '_label')),
+            $defaults[$key],
+            $min,
+            $max,
+            e(trans($lang . $key . '_comment', ['max' => $max]))
+        );
+    };
+    $checkbox = function (string $key) use ($defaults, $lang) {
+        return sprintf(
+            '<div class="form-group span-right checkbox-field"><div class="checkbox custom-checkbox">'
+            . '<input type="hidden" name="Faker[%1$s]" value="0">'
+            . '<input type="checkbox" id="Faker-%1$s" name="Faker[%1$s]" value="1"%2$s>'
+            . '<label for="Faker-%1$s">%3$s</label>'
+            . '<p class="help-block">%4$s</p></div></div>',
+            e($key),
+            $defaults[$key] ? ' checked' : '',
+            e(trans($lang . $key . '_label')),
+            e(trans($lang . $key . '_comment'))
+        );
+    };
+?>
+<div class="padded-container">
+    <div class="callout callout-warning">
+        <div class="header">
+            <i class="icon-warning"></i>
+            <h3><?= e(trans($lang . 'warning_title')) ?></h3>
+            <p><?= e(trans($lang . 'warning_text')) ?></p>
+        </div>
+    </div>
+
+    <?= Form::open(['id' => 'blogExtensionFaker']) ?>
+        <div class="form-elements" role="form">
+            <div class="form-group section-field span-full">
+                <h4><?= e(trans($lang . 'section_data')) ?></h4>
+            </div>
+            <?= $number('categories', 0, $limits['categories']) ?>
+            <?= $number('tags', 0, $limits['tags']) ?>
+            <?= $number('posts', 0, $limits['posts']) ?>
+
+            <div class="form-group section-field span-full">
+                <h4><?= e(trans($lang . 'section_content')) ?></h4>
+            </div>
+            <?= $number('content', $limits['content'][0], $limits['content'][1]) ?>
+            <?= $checkbox('paragraphs') ?>
+
+            <div class="form-group section-field span-full">
+                <h4><?= e(trans($lang . 'section_pictures')) ?></h4>
+            </div>
+            <div class="form-group span-left dropdown-field">
+                <label for="Faker-media_folder" class="form-label"><?= e(trans($lang . 'media_folder_label')) ?></label>
+                <select id="Faker-media_folder" name="Faker[media_folder]" class="form-control custom-select">
+                    <?php foreach ($mediaFolders as $folder): ?>
+                        <option value="<?= e($folder) ?>"><?= e($folder) ?></option>
+                    <?php endforeach ?>
+                </select>
+                <p class="help-block"><?= e(trans($lang . 'media_folder_comment')) ?></p>
+            </div>
+            <?= $checkbox('pictures') ?>
+        </div>
+
+        <div class="form-buttons">
+            <button
+                type="submit"
+                class="btn btn-primary wn-icon-magic"
+                data-request="onGenerate"
+                data-request-confirm="<?= e(trans($lang . 'confirm')) ?>"
+                data-load-indicator="<?= e(trans($lang . 'generating')) ?>"
+            >
+                <?= e(trans($lang . 'generate')) ?>
+            </button>
+        </div>
+    <?= Form::close() ?>
+</div>

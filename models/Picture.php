@@ -1,27 +1,23 @@
-<?php namespace NumenCode\BlogExtension\Models;
+<?php
 
-use Model;
-use Winter\Storm\Database\Traits\Sortable;
-use Winter\Storm\Database\Traits\Validation;
+declare(strict_types=1);
 
-class Picture extends Model
+namespace NumenCode\BlogExtension\Models;
+
+/**
+ * A picture of a blog post's gallery (a media library path in "picture").
+ */
+class Picture extends PostAttachment
 {
-    use Sortable, Validation;
-
     public $table = 'numencode_blogextension_pictures';
 
-    public $implement = ['@Winter.Translate.Behaviors.TranslatableModel'];
-
-    public $rules = [];
+    public $rules = [
+        'picture' => 'required',
+    ];
 
     protected $fillable = [
         'title',
         'picture',
         'is_published',
-        'sort_order',
-    ];
-
-    public $translatable = [
-        'title',
     ];
 }
