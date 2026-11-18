@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.1] - 2026-11-18
+
+### Fixed
+
+- Packagist's metadata for 2.0.0 referred to a different commit than the git tag. This release has the same code as
+  2.0.0 and is the version to install.
+- README: e-mail addresses are written as links (Markdown lint).
+
 ## [2.0.0] - 2026-11-11
 
 A rewrite on NumenCode.Fundamentals 2.1, Winter.Blog 2.2+ and Winter CMS 1.2.15. It contains breaking changes –
@@ -124,6 +132,7 @@ see [Upgrading from 1.x](#upgrading-from-1x).
 - Initial release of the **Blog Extension Plugin** for Winter CMS 1.2.7: tags, picture gallery, file attachments,
   WYSIWYG editors, RSS feed settings, content faker, breadcrumbs and reading time.
 
-[Unreleased]: https://github.com/numencode/wn-blogextension-plugin/compare/v2.0.0...HEAD
+[Unreleased]: https://github.com/numencode/wn-blogextension-plugin/compare/v2.0.1...HEAD
+[2.0.1]: https://github.com/numencode/wn-blogextension-plugin/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/numencode/wn-blogextension-plugin/compare/v1.0.0...v2.0.0
 [1.0.0]: https://github.com/numencode/wn-blogextension-plugin/releases/tag/v1.0.0
