@@ -199,13 +199,13 @@ Please refer to the [CONTRIBUTING](CONTRIBUTING.md) guide for details on contrib
 
 ## Security
 
-If you identify any security issues, email info@numencode.com rather than using the issue tracker.
+If you identify any security issues, email <info@numencode.com> rather than using the issue tracker.
 
 ## Author
 
 The **NumenCode.BlogExtension** plugin is created and maintained by [Blaz Orazem](https://orazem.si/).
 
-For inquiries, contact: info@numencode.com
+For inquiries, contact: <info@numencode.com>
 
 ## License
 
