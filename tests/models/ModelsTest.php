@@ -145,7 +145,9 @@ class ModelsTest extends BlogExtensionTestCase
     public function testFeaturesAreEnabledByDefault(): void
     {
         foreach (array_keys(Settings::FEATURES) as $feature) {
-            $this->assertTrue(Settings::isFeatureEnabled($feature), $feature);
+            // Bricks also need the NumenCode.Bricks plugin
+            $expected = $feature !== 'bricks' || Settings::bricksInstalled();
+            $this->assertSame($expected, Settings::isFeatureEnabled($feature), $feature);
         }
 
         Settings::set('extension_files', false);

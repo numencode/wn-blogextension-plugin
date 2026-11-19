@@ -56,6 +56,34 @@ class BlogExtenderTest extends BlogExtensionTestCase
         $this->assertArrayNotHasKey('files_list', $this->postFields());
     }
 
+    public function testBricksTabWithNumenCodeBricks(): void
+    {
+        if (is_file(plugins_path('numencode/bricks/Plugin.php'))) {
+            $this->instantiatePlugin('NumenCode.Bricks');
+        }
+
+        $this->loginBackendUser([], true);
+
+        if (!Settings::bricksInstalled()) {
+            $this->assertArrayNotHasKey('bricks', $this->postFields(), 'No bricks field without NumenCode.Bricks');
+            $this->markTestSkipped('NumenCode.Bricks is not installed.');
+        }
+
+        $fields = $this->postFields();
+        $order = array_keys($fields);
+
+        $this->assertSame('bricks', $fields['bricks']['type']);
+        $this->assertSame('numencode.blogextension::lang.tabs.bricks', $fields['bricks']['tab']);
+        $this->assertSame(array_search('categories', $order) - 1, array_search('bricks', $order), 'The tab after "Edit"');
+
+        $post = new \Winter\Blog\Models\Post();
+        $this->assertTrue($post->isJsonable('bricks'));
+        $this->assertContains('bricks', $post->translatable);
+
+        Settings::set('extension_bricks', false);
+        $this->assertArrayNotHasKey('bricks', $this->postFields());
+    }
+
     public function testFieldLayoutAndExcerptEditor(): void
     {
         $fields = $this->postFields();

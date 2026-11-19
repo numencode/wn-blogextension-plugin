@@ -7,8 +7,11 @@ namespace NumenCode\BlogExtension\Tests\Updates;
 use Db;
 use NumenCode\BlogExtension\Tests\BlogExtensionTestCase;
 use NumenCode\BlogExtension\Updates\V200UpgradeTables;
+use NumenCode\BlogExtension\Updates\V210AddBricksToPosts;
+use Schema;
 
 require_once __DIR__ . '/../../updates/v2_0_0_upgrade_tables.php';
+require_once __DIR__ . '/../../updates/v2_1_0_add_bricks_to_posts.php';
 
 class MigrationTest extends BlogExtensionTestCase
 {
@@ -57,5 +60,18 @@ class MigrationTest extends BlogExtensionTestCase
         Db::table('numencode_blogextension_files')->insert(['post_id' => $postId, 'title' => 'F', 'file' => '/f.pdf']);
 
         $this->assertSame(1, (int) Db::table('numencode_blogextension_files')->value('is_published'));
+    }
+
+    public function testPostsGetABricksColumn(): void
+    {
+        $this->assertTrue(Schema::hasColumn('winter_blog_posts', 'bricks'));
+
+        $migration = new V210AddBricksToPosts();
+        $migration->down();
+        $this->assertFalse(Schema::hasColumn('winter_blog_posts', 'bricks'));
+
+        $migration->up();
+        $migration->up();
+        $this->assertTrue(Schema::hasColumn('winter_blog_posts', 'bricks'));
     }
 }

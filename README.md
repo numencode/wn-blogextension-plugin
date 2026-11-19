@@ -17,6 +17,8 @@ and a configurable RSS feed.
 - **Picture gallery** – every post gets a gallery of media library pictures with titles (it replaces Winter.Blog's
   featured images). `post.primaryPicture` is the first published picture.
 - **Attached files** – media library files with titles, e.g. PDF documents.
+- **Bricks** – with [NumenCode.Bricks](https://github.com/numencode/wn-bricks-plugin) installed, posts can be composed
+  of bricks (text, images, galleries, components, …) in a "Bricks" tab, one list per language.
 - **Publishing** – pictures and files can be unpublished; they are hidden on the website and visible to backend users.
 - **Components** – tag list, post tags, tag page, related posts, breadcrumbs, reading time and an RSS feed, with
   Bootstrap 5 starter templates.
@@ -55,6 +57,8 @@ The plugin adds to Winter.Blog's post form:
 - **Pictures** – the gallery, edited inline: drag to reorder, collapse or expand the items one by one or all at once,
   unpublish single pictures,
 - **Files** – the attached files, edited the same way.
+- **Bricks** (tab "Bricks", with NumenCode.Bricks) – the post's bricks, stored in the posts' `bricks` column and
+  translatable with Winter.Translate. Render them in the post page (see the example below).
 
 It also arranges the fields of the "Manage" tab in two columns.
 
@@ -64,7 +68,7 @@ Settings → Blog → **Blog Extension**:
 
 | Tab | Settings |
 |---|---|
-| Extensions | Switch tags, the picture gallery and attached files on or off (all on by default), and edit the excerpt with the rich editor (off by default; for the post content, use Winter.Blog's own "Use rich editor" setting). |
+| Extensions | Switch tags, the picture gallery, attached files and bricks on or off (all on by default; bricks need NumenCode.Bricks), and edit the excerpt with the rich editor (off by default; for the post content, use Winter.Blog's own "Use rich editor" setting). |
 | RSS feed | Title, description, category, copyright, generator, language, author, comments anchor, full content. |
 
 ### Permissions
@@ -75,6 +79,7 @@ Settings → Blog → **Blog Extension**:
 | `numencode.blogextension.access_tags` | Blog → Tags and the tags field | developer, publisher |
 | `numencode.blogextension.access_pictures` | the picture gallery of posts | developer, publisher |
 | `numencode.blogextension.access_files` | the attached files of posts | developer, publisher |
+| `numencode.blogextension.access_bricks` | the bricks of posts (with NumenCode.Bricks) | developer, publisher |
 | `numencode.blogextension.access_faker` | Blog → Faker | developer |
 
 ### Faker
@@ -152,7 +157,9 @@ tagPage = "blog/tag"
     <img src="{{ picture.picture|media|resize(400, 300, { mode: 'crop' }) }}" alt="{{ picture.title }}">
 {% endfor %}
 
-{{ post.content_html|raw }}
+{# With NumenCode.Bricks: the post's bricks, else its content #}
+{% set bricksHtml = renderBricks(post.bricks ?? [], 'post') %}
+{{ bricksHtml|trim ? bricksHtml|raw : post.content_html|raw }}
 
 {% for file in post.files %}
     <a href="{{ file.file|media }}">{{ file.title ?: file.file }}</a>

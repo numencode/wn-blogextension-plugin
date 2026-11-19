@@ -30,6 +30,14 @@ tabs:
             span: auto
             default: true
 
+        extension_bricks:
+            tab: numencode.blogextension::lang.tabs.extensions
+            label: numencode.blogextension::lang.settings.extensions.bricks_label
+            comment: numencode.blogextension::lang.settings.extensions.bricks_comment
+            type: switch
+            span: auto
+            default: true
+
         editor_excerpt_wysiwyg:
             tab: numencode.blogextension::lang.tabs.extensions
             label: numencode.blogextension::lang.settings.extensions.excerpt_label

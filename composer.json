@@ -26,7 +26,8 @@
     "suggest": {
         "fakerphp/faker": "Enables the Faker page (generates demo categories, posts and pictures while app.debug is on).",
         "winter/wn-translate-plugin": "Enables translations of tags, pictures and files.",
-        "winter/wn-pages-plugin": "Enables blog tags as menu items (and in Winter.Sitemap)."
+        "winter/wn-pages-plugin": "Enables blog tags as menu items (and in Winter.Sitemap).",
+        "numencode/wn-bricks-plugin": "Enables bricks on blog posts (a translatable block-based content builder)."
     },
     "autoload": {
         "psr-4": {

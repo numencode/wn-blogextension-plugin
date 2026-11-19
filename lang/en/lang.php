@@ -10,12 +10,14 @@ return [
         'rss_feed'   => 'RSS feed',
         'pictures'   => 'Pictures',
         'files'      => 'Files',
+        'bricks'     => 'Bricks',
     ],
     'permissions'  => [
         'manage_settings' => 'Manage the blog extension settings',
         'access_tags'     => 'Manage blog tags',
         'access_pictures' => 'Manage the picture galleries of blog posts',
         'access_files'    => 'Manage the attached files of blog posts',
+        'access_bricks'   => 'Edit the bricks of blog posts',
         'access_faker'    => 'Generate demo blog data (Faker, only while debug mode is on)',
     ],
     'settings'     => [
@@ -27,6 +29,8 @@ return [
             'pictures_comment' => 'Blog posts have a picture gallery (replaces the featured images).',
             'files_label'      => 'Attached files',
             'files_comment'    => 'Blog posts can have attached files.',
+            'bricks_label'     => 'Bricks',
+            'bricks_comment'   => 'Blog posts can be composed of bricks (needs the NumenCode.Bricks plugin).',
             'excerpt_label'    => 'Rich editor for the excerpt',
             'excerpt_comment'  => 'Edit the blog post excerpt with the rich editor. The post content uses the "Use rich editor" setting of the Blog plugin.',
         ],

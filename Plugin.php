@@ -78,6 +78,11 @@ class Plugin extends PluginBase
                 'label' => 'numencode.blogextension::lang.permissions.access_files',
                 'roles' => $editors,
             ],
+            'numencode.blogextension.access_bricks'   => [
+                'tab'   => 'numencode.blogextension::lang.plugin.name',
+                'label' => 'numencode.blogextension::lang.permissions.access_bricks',
+                'roles' => ['developer', 'publisher'],
+            ],
             'numencode.blogextension.access_faker'    => [
                 'tab'   => $tab,
                 'label' => 'numencode.blogextension::lang.permissions.access_faker',

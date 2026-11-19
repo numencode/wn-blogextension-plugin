@@ -21,6 +21,7 @@ class Settings extends Model
         'tags'     => 'numencode.blogextension.access_tags',
         'pictures' => 'numencode.blogextension.access_pictures',
         'files'    => 'numencode.blogextension.access_files',
+        'bricks'   => 'numencode.blogextension.access_bricks',
     ];
 
     public $implement = ['System.Behaviors.SettingsModel'];
@@ -30,12 +31,22 @@ class Settings extends Model
     public $settingsFields = 'fields.yaml';
 
     /**
-     * Whether a feature (tags, pictures or files) is switched on. Features are on unless switched off.
+     * Whether a feature (tags, pictures, files or bricks) is switched on. Features are on unless switched off;
+     * bricks also need the NumenCode.Bricks plugin.
      */
     public static function isFeatureEnabled(string $feature): bool
     {
         return array_key_exists($feature, static::FEATURES)
+            && ($feature !== 'bricks' || static::bricksInstalled())
             && (bool) static::get('extension_' . $feature, true);
+    }
+
+    /**
+     * Whether NumenCode.Bricks is installed and enabled (bricks on blog posts).
+     */
+    public static function bricksInstalled(): bool
+    {
+        return \System\Classes\PluginManager::instance()->exists('NumenCode.Bricks');
     }
 
     /**

@@ -35,7 +35,8 @@ class BlogExtender
 
     /**
      * Post relations "tags", "pictures" and "files" (pictures and files are edited inline with relation
-     * repeaters) and the "primary_picture" attribute: the first published picture.
+     * repeaters), the "primary_picture" attribute (the first published picture) and, with NumenCode.Bricks, the
+     * translatable "bricks" attribute.
      */
     protected function extendPostModel(): void
     {
@@ -61,11 +62,20 @@ class BlogExtender
             $post->addDynamicMethod('getPrimaryPictureAttribute', function () use ($post): ?Picture {
                 return $post->pictures->first();
             });
+
+            // NumenCode.Bricks: a list of bricks per post (per language with Winter.Translate)
+            if (Settings::bricksInstalled()) {
+                $post->addJsonable('bricks');
+
+                if (!in_array('bricks', $post->translatable, true)) {
+                    $post->translatable[] = 'bricks';
+                }
+            }
         });
     }
 
     /**
-     * Post form: field layout, tags, picture gallery, files and the excerpt editor.
+     * Post form: field layout, tags, picture gallery, files, bricks and the excerpt editor.
      */
     protected function extendPostForm(): void
     {
@@ -126,6 +136,19 @@ class BlogExtender
 
         if (Settings::canUseFeature('files')) {
             $fields['files_list'] = $this->repeaterField('files', 'file');
+        }
+
+        // NumenCode.Bricks turns it into a list of bricks (its listener runs after this one); a tab after "Edit"
+        if (Settings::canUseFeature('bricks')) {
+            $fields['bricks'] = [
+                'tab'  => 'numencode.blogextension::lang.tabs.bricks',
+                'type' => 'bricks',
+                'span' => 'full',
+            ];
+
+            if (isset($fields['categories'])) {
+                $fields = array_before($fields, 'categories', 'bricks');
+            }
         }
 
         return $fields;

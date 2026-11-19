@@ -17,3 +17,6 @@
     - v2_0_0_upgrade_tables.php
 2.0.1:
     - 'Maintenance release: same code as 2.0.0, published so Packagist refers to the tagged commit'
+2.1.0:
+    - 'Bricks on blog posts (with NumenCode.Bricks): a bricks column on posts, a Bricks tab in the post form'
+    - v2_1_0_add_bricks_to_posts.php

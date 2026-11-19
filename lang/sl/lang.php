@@ -10,12 +10,14 @@ return [
         'rss_feed'   => 'Vir RSS',
         'pictures'   => 'Slike',
         'files'      => 'Datoteke',
+        'bricks'     => 'Gradniki',
     ],
     'permissions'  => [
         'manage_settings' => 'Upravljanje nastavitev razširitve bloga',
         'access_tags'     => 'Upravljanje oznak bloga',
         'access_pictures' => 'Upravljanje galerij slik v objavah',
         'access_files'    => 'Upravljanje priloženih datotek v objavah',
+        'access_bricks'   => 'Urejanje gradnikov v objavah',
         'access_faker'    => 'Ustvarjanje demo podatkov bloga (samo za razvijalce)',
     ],
     'settings'     => [
@@ -27,6 +29,8 @@ return [
             'pictures_comment' => 'Objave imajo galerijo slik (namesto izpostavljenih slik).',
             'files_label'      => 'Priložene datoteke',
             'files_comment'    => 'Objave imajo lahko priložene datoteke.',
+            'bricks_label'     => 'Gradniki',
+            'bricks_comment'   => 'Objave so lahko sestavljene iz gradnikov (potreben je vtičnik NumenCode.Bricks).',
             'excerpt_label'    => 'Urejevalnik besedila za povzetek',
             'excerpt_comment'  => 'Povzetek objave se ureja z urejevalnikom besedila. Za vsebino objave velja nastavitev »Uporabi urejevalnik besedila« vtičnika Blog.',
         ],
