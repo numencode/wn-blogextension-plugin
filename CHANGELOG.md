@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- With Winter.Translate, a translated post showed another language's content: saving a post whose translation had
+  changed stored the content of the last translated language (e.g. Slovenian) as the default language's rendered
+  content (`content_html`), so the English page showed the Slovenian text. Winter.Translate 2.4 switches the post into
+  each changed language to validate it and doesn't switch back, and Winter.Blog then renders the content in that
+  language. The post's language is now restored after the validation, and the default language's rendered content is
+  always built from the default content.
+- Translations of a post now have their own rendered content, built from their content. Before, Winter.Blog didn't
+  render translations, so they showed the default language's text (or, because of the bug above, by chance the
+  right one). A translation without content shows the default language's content.
+- The update repairs existing posts: it rebuilds the rendered content of every post and translation. Run
+  `php artisan winter:up`.
+
 ## [2.1.0] - 2026-11-19
 
 ### Added

@@ -15,6 +15,7 @@ use NumenCode\BlogExtension\Models\Tag;
 use Winter\Blog\Controllers\Posts as PostsController;
 use Winter\Blog\Models\Category;
 use Winter\Blog\Models\Post;
+use Winter\Translate\Classes\Translator;
 
 /**
  * Extends Winter.Blog: post relations (tags, pictures, files), the post form, the category list, the Blog side
@@ -71,6 +72,55 @@ class BlogExtender
                     $post->translatable[] = 'bricks';
                 }
             }
+
+            if (class_exists(Translator::class)) {
+                $this->translateContentHtml($post);
+            }
+        });
+    }
+
+    /**
+     * Winter.Translate: the rendered content ("content_html") of every language matches that language's content.
+     *
+     * Winter.Blog builds content_html from the content in a beforeSave handler, in the post's current language:
+     * - Winter.Translate 2.4 validates each changed language by switching the post into it and doesn't switch
+     *   back, so content_html was built from the last validated language and saved as the default language's
+     *   (fixed in Translate after 2.4.0). The post's language is restored right after that (handlers run before
+     *   it is attached get a lower priority), and content_html of the default language is built from the default
+     *   content in any case.
+     * - Winter.Blog doesn't compute content_html of the other languages; it is resolved for Translate here.
+     */
+    protected function translateContentHtml(Post $post): void
+    {
+        $context = null;
+
+        // Before Translate's handler (priority 0): remember the post's language; after it: restore it
+        $post->bindEvent('model.saveInternal', function () use ($post, &$context): void {
+            $context = $post->translateContext();
+        }, 1);
+        $post->bindEvent('model.saveInternal', function () use ($post, &$context): void {
+            if ($context !== null) {
+                $post->translateContext($context);
+            }
+        }, -1);
+
+        // After Winter.Blog's handler (priority 0)
+        $post->bindEvent('model.beforeSave', function () use ($post): void {
+            $current = $post->translateContext();
+            $default = Translator::instance()->getDefaultLocale();
+
+            $post->translateContext($default);
+            $post->content_html = Post::formatHtml((string) $post->getAttributeTranslated('content', $default));
+            $post->translateContext($current);
+        }, -1);
+
+        // The other languages: from their own content, empty without it (then the default language's is shown)
+        $post->bindEvent('model.translate.resolveComputedFields', function (string $locale) use ($post): array {
+            $content = $post->hasTranslation('content', $locale)
+                ? (string) $post->getAttributeTranslated('content', $locale)
+                : '';
+
+            return ['content_html' => trim($content) !== '' ? trim(Post::formatHtml($content)) : ''];
         });
     }
 

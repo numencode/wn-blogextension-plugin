@@ -72,6 +72,14 @@ abstract class BlogExtensionTestCase extends PluginTestCase
         return Post::find($post->id);
     }
 
+    /**
+     * A post's rendered content (Winter.Blog renders Markdown unless its rich editor setting is on).
+     */
+    protected function html(string $content): string
+    {
+        return trim(Post::formatHtml($content));
+    }
+
     protected function makeTag(string $name): Tag
     {
         return Tag::create(['name' => $name]);

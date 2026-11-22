@@ -20,3 +20,6 @@
 2.1.0:
     - 'Bricks on blog posts (with NumenCode.Bricks): a bricks column on posts, a Bricks tab in the post form'
     - v2_1_0_add_bricks_to_posts.php
+2.2.0:
+    - 'Translated posts: each language''s rendered content (content_html) is built from that language''s content; existing posts are repaired'
+    - v2_2_0_rebuild_post_content_html.php
