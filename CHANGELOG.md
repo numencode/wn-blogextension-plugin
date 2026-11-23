@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.0] - 2026-11-23
+
 ### Fixed
 
 - With Winter.Translate, a translated post showed another language's content: saving a post whose translation had
@@ -155,7 +157,8 @@ see [Upgrading from 1.x](#upgrading-from-1x).
 - Initial release of the **Blog Extension Plugin** for Winter CMS 1.2.7: tags, picture gallery, file attachments,
   WYSIWYG editors, RSS feed settings, content faker, breadcrumbs and reading time.
 
-[Unreleased]: https://github.com/numencode/wn-blogextension-plugin/compare/v2.1.0...HEAD
+[Unreleased]: https://github.com/numencode/wn-blogextension-plugin/compare/v2.2.0...HEAD
+[2.2.0]: https://github.com/numencode/wn-blogextension-plugin/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/numencode/wn-blogextension-plugin/compare/v2.0.1...v2.1.0
 [2.0.1]: https://github.com/numencode/wn-blogextension-plugin/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/numencode/wn-blogextension-plugin/compare/v1.0.0...v2.0.0
